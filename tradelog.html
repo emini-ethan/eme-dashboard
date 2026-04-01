@@ -3,286 +3,308 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Emini Ethan — Trade Log</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Emini Ethan</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0a0a0a;--s1:#111;--s2:#181818;--s3:#202020;--s4:#282828;
-  --b1:#222;--b2:#333;--b3:#444;
-  --t1:#efefef;--t2:#888;--t3:#444;
-  --green:#4ade80;--gdim:#0f2a1a;--gtext:#86efac;
-  --red:#f87171;--rdim:#2a0f0f;--rtext:#fca5a5;
-  --amber:#fbbf24;--adim:#2a1f0a;--atext:#fcd34d;
-  --blue:#60a5fa;--bdim:#0f1a2a;--btext:#93c5fd;
-  --accent:#c8ff00;
-  --purple:#a78bfa;--pdim:#1a1528;
-  --teal:#5eead4;--tdim:#0f2828;
-  --radius:10px;--radius-sm:6px;
+  --bg:#080808;
+  --c1:#0f0f0f;--c2:#151515;--c3:#1c1c1c;--c4:#242424;
+  --b1:#1e1e1e;--b2:#2a2a2a;--b3:#363636;
+  --t1:#f0f0f0;--t2:#777;--t3:#3a3a3a;
+  --green:#3ddc84;--gdim:#0c2018;--gtext:#3ddc84;
+  --red:#ff6b6b;--rdim:#200d0d;--rtext:#ff6b6b;
+  --amber:#f5a623;--adim:#1f160a;--atext:#f5a623;
+  --blue:#5b9cf6;--bdim:#0d1829;--btext:#5b9cf6;
+  --accent:#c8ff00;--accent2:#a8d800;
+  --purple:#9d7fea;--pdim:#160f2a;
+  --teal:#3ecfcf;--tdim:#0a1f1f;
+  --r-sm:8px;--r-md:14px;--r-lg:20px;--r-xl:24px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);font-size:14px;min-height:100vh;overflow-x:hidden}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .mono{font-family:'JetBrains Mono',monospace}
-.pos{color:var(--green)}.neg{color:var(--red)}
 
-/* BOTTOM NAV mobile */
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:62px;background:var(–s1);border-top:1px solid var(–b1);z-index:100}
-.bottom-nav-inner{display:flex;height:100%;padding:0 4px}
-.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(–t3);font-size:10px;font-weight:500;padding:8px 0;border:none;background:none;-webkit-appearance:none}
-.bnav-item.active{color:var(–accent)}
-.bnav-icon{font-size:20px;line-height:1}
-.bnav-log-pill{background:var(–accent);color:#000;border-radius:14px;padding:6px 16px;font-size:11px;font-weight:700;margin-top:-2px;white-space:nowrap}
+/* ── HEADER ── */
+.header{padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(–bg);z-index:40;border-bottom:1px solid var(–b1)}
+.header-title{font-size:15px;font-weight:700;letter-spacing:.04em;color:var(–t1)}
+.header-title span{color:var(–accent)}
+.header-right{display:flex;align-items:center;gap:10px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(–green);flex-shrink:0}
+.sync-dot.fail{background:var(–red)}
+.sync-dot.loading{background:var(–amber);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-time{font-size:11px;color:var(–t3);font-family:‘JetBrains Mono’,monospace}
+.sync-btn{background:var(–c2);border:1px solid var(–b2);color:var(–t2);font-size:12px;padding:5px 10px;border-radius:var(–r-sm);cursor:pointer;font-family:‘Syne’,sans-serif}
 
-/* TOP NAV desktop */
-.top-nav{display:flex;align-items:center;border-bottom:1px solid var(–b1);padding:0 24px;height:48px;position:sticky;top:0;background:var(–bg);z-index:50}
-.nav-logo{font-family:‘JetBrains Mono’,monospace;font-size:12px;font-weight:500;color:var(–accent);letter-spacing:.08em;margin-right:24px;white-space:nowrap}
-.nav-tab{padding:0 14px;height:48px;display:flex;align-items:center;font-size:13px;color:var(–t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
-.nav-tab:hover{color:var(–t2)}
-.nav-tab.active{color:var(–accent);border-bottom-color:var(–accent)}
-.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.sync-btn{padding:5px 12px;border-radius:var(–radius-sm);border:1px solid var(–b2);background:transparent;color:var(–t2);font-size:12px;cursor:pointer;font-family:‘DM Sans’,sans-serif}
-.sync-status{font-size:11px;color:var(–t3);white-space:nowrap}
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(–c1);border-top:1px solid var(–b1);z-index:50;padding-bottom:var(–safe-bottom)}
+.bnav-inner{display:flex;height:56px}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;color:var(–t3);font-family:‘Syne’,sans-serif;font-size:10px;font-weight:500;cursor:pointer;transition:color .15s;padding:0}
+.bnav-btn.active{color:var(–accent)}
+.bnav-btn svg{width:20px;height:20px;stroke-width:1.6}
+.bnav-log{background:var(–accent);color:#000;border-radius:12px;padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:.02em}
 
-/* PAGES */
-.page{display:none;padding:20px 16px 80px}
+/* ── PAGES ── */
+.page{display:none;padding:16px 16px 80px;animation:fadeIn .18s ease}
 .page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
-/* STAT GRID */
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.stat{background:var(–s1);border:1px solid var(–b1);border-radius:var(–radius);padding:14px 16px}
-.stat-label{font-size:10px;color:var(–t3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
-.stat-val{font-size:20px;font-weight:500;font-family:‘JetBrains Mono’,monospace;line-height:1}
+/* ── HERO CARD ── */
+.hero{background:linear-gradient(135deg,#111 0%,#161616 100%);border:1px solid var(–b2);border-radius:var(–r-xl);padding:22px 22px 20px;margin-bottom:14px;position:relative;overflow:hidden}
+.hero::before{content:’’;position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:var(–accent);opacity:.04;border-radius:50%}
+.hero-label{font-size:10px;font-weight:600;color:var(–t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.hero-val{font-size:36px;font-weight:700;font-family:‘JetBrains Mono’,monospace;line-height:1;margin-bottom:6px}
+.hero-val.pos{color:var(–green)}.hero-val.neg{color:var(–red)}
+.hero-sub{font-size:12px;color:var(–t2)}
+
+/* ── STAT ROW ── */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-card{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:16px}
+.stat-label{font-size:10px;font-weight:600;color:var(–t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.stat-val{font-size:22px;font-weight:700;font-family:‘JetBrains Mono’,monospace;line-height:1}
 .stat-val.pos{color:var(–green)}.stat-val.neg{color:var(–red)}
-.stat-sub{font-size:11px;color:var(–t3);margin-top:4px}
+.stat-sub{font-size:11px;color:var(–t3);margin-top:5px}
 
-/* SECTION */
-.sec{font-size:10px;font-weight:500;color:var(–t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+/* ── SECTION HEADER ── */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:20px}
+.sec-title{font-size:11px;font-weight:700;color:var(–t2);text-transform:uppercase;letter-spacing:.1em}
+.sec-action{font-size:11px;color:var(–accent);font-weight:600;cursor:pointer;border:none;background:none;font-family:‘Syne’,sans-serif}
 
-/* TRADE CARDS mobile */
-.trade-card{background:var(–s1);border:1px solid var(–b1);border-radius:var(–radius);padding:14px;margin-bottom:8px}
-.tc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.tc-ticker{font-family:‘JetBrains Mono’,monospace;font-weight:500;font-size:16px}
-.tc-pl{font-family:‘JetBrains Mono’,monospace;font-weight:500;font-size:16px}
-.tc-mid{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.tc-bot{display:flex;align-items:center;justify-content:space-between}
+/* ── TRADE CARD ── */
+.trade-card{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:16px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}
+.trade-card:active{background:var(–c2);border-color:var(–b2)}
+.tc-row1{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.tc-ticker{font-size:17px;font-weight:700;letter-spacing:.02em}
+.tc-pl{font-size:17px;font-weight:700;font-family:‘JetBrains Mono’,monospace}
+.tc-pl.pos{color:var(–green)}.tc-pl.neg{color:var(–red)}.tc-pl.na{color:var(–t3)}
+.tc-row2{display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.tc-row3{display:flex;align-items:center;justify-content:space-between}
 .tc-date{font-size:11px;color:var(–t3);font-family:‘JetBrains Mono’,monospace}
 .tc-meta{font-size:11px;color:var(–t2);font-family:‘JetBrains Mono’,monospace}
-.tc-note{font-size:12px;color:var(–t3);margin-top:8px;line-height:1.55;font-style:italic}
+.tc-note{font-size:12px;color:var(–t3);margin-top:10px;line-height:1.6;padding-top:10px;border-top:1px solid var(–b1)}
 
-/* TABLE desktop */
-.table-wrap{background:var(–s1);border:1px solid var(–b1);border-radius:var(–radius);overflow:auto;margin-bottom:16px}
-table{width:100%;border-collapse:collapse;min-width:580px}
-thead tr{border-bottom:1px solid var(–b1)}
-th{padding:10px 14px;text-align:left;font-size:10px;font-weight:500;color:var(–t3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
-tbody tr{border-bottom:1px solid var(–b1);transition:background .1s}
-tbody tr:hover{background:var(–s2)}
-tbody tr:last-child{border-bottom:none}
-td{padding:10px 14px;font-size:13px}
-
-/* TAGS */
-.tag{display:inline-flex;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:500}
+/* ── TAGS ── */
+.tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.03em}
 .tag.call{background:var(–bdim);color:var(–btext)}
 .tag.put{background:var(–adim);color:var(–atext)}
 .tag.long{background:var(–gdim);color:var(–gtext)}
 .tag.short{background:var(–rdim);color:var(–rtext)}
-.tag.open{background:var(–s3);color:var(–t2)}
+.tag.open{background:var(–c3);color:var(–t2)}
 .tag.close{background:var(–gdim);color:var(–gtext)}
 .tag.scalein,.tag.scale{background:var(–pdim);color:var(–purple)}
 .tag.trim{background:var(–adim);color:var(–atext)}
+.tag.setup{background:var(–c3);color:var(–t2);border:1px solid var(–b2)}
 
-/* BREAKDOWN */
-.breakdown{background:var(–s1);border:1px solid var(–b1);border-radius:var(–radius);padding:14px 16px;margin-bottom:16px}
-.setup-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.setup-row:last-child{margin-bottom:0}
-.setup-name{font-size:12px;color:var(–t2);display:flex;align-items:center;gap:6px;min-width:108px}
-.bar-track{flex:1;height:5px;background:var(–s3);border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px}
-.setup-wr{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:var(–t3);min-width:30px;text-align:right}
-.setup-pl{font-size:11px;font-family:‘JetBrains Mono’,monospace;min-width:56px;text-align:right}
-
-/* PIPS */
-.pips{display:flex;gap:2px}
-.pip{width:6px;height:6px;border-radius:1px;background:var(–b2)}
+/* ── PIPS ── */
+.pips{display:flex;gap:3px;align-items:center}
+.pip{width:5px;height:5px;border-radius:1px;background:var(–b2)}
 .pip.on{background:var(–accent)}
 
-/* FORM */
-.form-wrap{max-width:540px}
-.form-card{background:var(–s1);border:1px solid var(–b1);border-radius:var(–radius);padding:20px}
-.form-title{font-size:16px;font-weight:500;margin-bottom:16px}
-.mode-toggle{display:flex;background:var(–s2);border-radius:var(–radius-sm);padding:3px;margin-bottom:20px}
-.mode-btn{flex:1;padding:9px;border-radius:4px;font-size:13px;cursor:pointer;border:none;background:transparent;color:var(–t3);font-family:‘DM Sans’,sans-serif}
-.mode-btn.active{background:var(–s3);color:var(–t1)}
+/* ── BREAKDOWN ── */
+.breakdown-card{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:18px;margin-bottom:8px}
+.setup-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.setup-row:last-child{margin-bottom:0}
+.setup-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.setup-name{font-size:12px;color:var(–t1);min-width:110px;font-weight:500}
+.bar-track{flex:1;height:4px;background:var(–c3);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px}
+.setup-wr{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:var(–t3);min-width:28px;text-align:right}
+.setup-pl{font-size:11px;font-family:‘JetBrains Mono’,monospace;min-width:60px;text-align:right;font-weight:500}
+
+/* ── FORM ── */
+.form-header{font-size:18px;font-weight:700;margin-bottom:6px}
+.form-sub{font-size:12px;color:var(–t2);margin-bottom:20px}
+.mode-toggle{display:flex;background:var(–c2);border-radius:var(–r-sm);padding:3px;margin-bottom:20px;gap:3px}
+.mode-btn{flex:1;padding:9px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(–t3);font-family:‘Syne’,sans-serif;transition:all .15s}
+.mode-btn.active{background:var(–c3);color:var(–t1)}
+.form-section{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:18px;margin-bottom:12px}
+.form-section-title{font-size:10px;font-weight:700;color:var(–t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .form-row.three{grid-template-columns:1fr 1fr 1fr}
-.form-row.full{grid-template-columns:1fr}
+.form-row.full{grid-template-columns:1fr;margin-bottom:0}
 .field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:10px;color:var(–t3);text-transform:uppercase;letter-spacing:.07em}
+.field:last-child{margin-bottom:0}
+.field label{font-size:10px;font-weight:600;color:var(–t3);text-transform:uppercase;letter-spacing:.08em}
 .field input,.field select,.field textarea{
-padding:11px 12px;border-radius:var(–radius-sm);border:1px solid var(–b1);
-background:var(–s2);color:var(–t1);font-size:14px;
-font-family:‘DM Sans’,sans-serif;outline:none;-webkit-appearance:none;appearance:none;
+padding:11px 13px;border-radius:var(–r-sm);border:1px solid var(–b1);
+background:var(–c2);color:var(–t1);font-size:14px;
+font-family:‘Syne’,sans-serif;outline:none;-webkit-appearance:none;
+transition:border-color .15s;
 }
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(–b3)}
-.field select{background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘10’ height=‘10’ viewBox=‘0 0 10 10’%3E%3Cpath fill=’%23555’ d=‘M5 7L0 2h10z’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-.field select option{background:var(–s2)}
-.field textarea{resize:vertical;min-height:80px;line-height:1.5}
-.submit-btn{width:100%;padding:15px;border-radius:var(–radius-sm);background:var(–accent);color:#000;font-size:15px;font-weight:700;border:none;cursor:pointer;margin-top:14px;font-family:‘DM Sans’,sans-serif;letter-spacing:.02em}
-.submit-btn:active{opacity:.85}
-.submit-btn:disabled{opacity:.4;cursor:not-allowed}
-.form-msg{text-align:center;font-size:13px;margin-top:10px;min-height:20px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(–accent)}
+.field select{background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘10’ height=‘6’ viewBox=‘0 0 10 6’%3E%3Cpath fill=’%23444’ d=‘M0 0l5 6 5-6z’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+.field select option{background:var(–c2)}
+.field textarea{resize:none;height:80px;line-height:1.5}
+.submit-btn{width:100%;padding:16px;border-radius:var(–r-md);background:var(–accent);color:#000;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:‘Syne’,sans-serif;letter-spacing:.03em;margin-top:4px;transition:opacity .15s}
+.submit-btn:active{opacity:.8}
+.submit-btn:disabled{opacity:.35;cursor:not-allowed}
+.form-msg{text-align:center;font-size:13px;margin-top:12px;min-height:18px;font-weight:500}
 .form-msg.ok{color:var(–green)}.form-msg.err{color:var(–red)}
 
-.loading{text-align:center;padding:60px 20px;color:var(–t3);font-size:13px}
-
-/* RESPONSIVE */
+/* ── DESKTOP ── */
 @media(min-width:640px){
-.bottom-nav{display:none!important}
-.top-nav{display:flex}
-.page{padding:24px 24px 40px}
-.stat-grid{grid-template-columns:repeat(5,1fr)}
-.mobile-only{display:none!important}
-.desktop-only{display:block!important}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.bnav{display:none}
+.header{padding:14px 28px}
+.page{padding:24px 28px 40px;max-width:900px;margin:0 auto}
+.stat-row{grid-template-columns:repeat(4,1fr)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.hero{padding:28px}
+.hero-val{font-size:42px}
+.desktop-nav{display:flex!important}
 }
-@media(max-width:639px){
-.top-nav{display:none}
-.bottom-nav{display:flex}
-.mobile-only{display:block}
-.desktop-only{display:none!important}
-.two-col{display:block}
-.form-row.three{grid-template-columns:1fr 1fr}
-}
+.desktop-nav{display:none;align-items:center;gap:4px;margin-left:20px}
+.desktop-tab{padding:6px 14px;border-radius:var(–r-sm);font-size:13px;font-weight:600;color:var(–t3);cursor:pointer;border:none;background:none;font-family:‘Syne’,sans-serif;transition:all .15s}
+.desktop-tab:hover{color:var(–t1);background:var(–c2)}
+.desktop-tab.active{color:var(–accent);background:var(–c2)}
+
+.loading{text-align:center;padding:60px 0;color:var(–t3);font-size:13px}
 </style>
 
 </head>
 <body>
 
-<nav class="top-nav">
-  <span class="nav-logo">EMINI ETHAN</span>
-  <div class="nav-tab active" onclick="showPage('dashboard',this)">Dashboard</div>
-  <div class="nav-tab" onclick="showPage('futures-log',this)">Futures</div>
-  <div class="nav-tab" onclick="showPage('options-log',this)">Options</div>
-  <div class="nav-tab" onclick="showPage('entry',this)">+ Log Trade</div>
-  <div class="nav-right">
-    <span class="sync-status" id="sync-status">—</span>
-    <button class="sync-btn" onclick="loadData()">↻ Sync</button>
+<div class="header">
+  <div style="display:flex;align-items:center;gap:0">
+    <div class="header-title">EMINI<span>-</span>ETHAN</div>
+    <div class="desktop-nav">
+      <button class="desktop-tab active" onclick="showPage('dashboard',this)">Dashboard</button>
+      <button class="desktop-tab" onclick="showPage('futures',this)">Futures</button>
+      <button class="desktop-tab" onclick="showPage('options',this)">Options</button>
+      <button class="desktop-tab" onclick="showPage('log',this)">+ Log</button>
+    </div>
   </div>
-</nav>
+  <div class="header-right">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span class="sync-time" id="sync-time">—</span>
+    <button class="sync-btn" onclick="loadData()">↻</button>
+  </div>
+</div>
 
-<div class="bottom-nav">
-  <div class="bottom-nav-inner">
-    <button class="bnav-item active" onclick="showPageMobile('dashboard',this)">
-      <span class="bnav-icon">📊</span><span>Dashboard</span>
+<div class="bnav">
+  <div class="bnav-inner">
+    <button class="bnav-btn active" onclick="showPage('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Dashboard</span>
     </button>
-    <button class="bnav-item" onclick="showPageMobile('futures-log',this)">
-      <span class="bnav-icon">📈</span><span>Futures</span>
+    <button class="bnav-btn" onclick="showPage('futures',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      <span>Futures</span>
     </button>
-    <button class="bnav-item" onclick="showPageMobile('options-log',this)">
-      <span class="bnav-icon">🎯</span><span>Options</span>
+    <button class="bnav-btn" onclick="showPage('options',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M9 9h.01M15 9h.01M9.5 13.5s.833 1.5 2.5 1.5 2.5-1.5 2.5-1.5"/></svg>
+      <span>Options</span>
     </button>
-    <button class="bnav-item" onclick="showPageMobile('entry',this)">
-      <span class="bnav-log-pill">+ Log</span>
-    </button>
-    <button class="bnav-item" onclick="loadData()">
-      <span class="bnav-icon">↻</span><span id="mobile-sync-label">Sync</span>
+    <button class="bnav-btn" onclick="showPage('log',this)">
+      <span class="bnav-log">+ Log</span>
     </button>
   </div>
 </div>
+
+<!-- DASHBOARD -->
 
 <div class="page active" id="page-dashboard">
-  <div id="dash-content"><div class="loading">Loading your data...</div></div>
+  <div id="dash-content"><div class="loading">Syncing your data...</div></div>
 </div>
-<div class="page" id="page-futures-log">
+
+<!-- FUTURES -->
+
+<div class="page" id="page-futures">
   <div id="futures-content"><div class="loading">Loading...</div></div>
 </div>
-<div class="page" id="page-options-log">
+
+<!-- OPTIONS -->
+
+<div class="page" id="page-options">
   <div id="options-content"><div class="loading">Loading...</div></div>
 </div>
 
-<div class="page" id="page-entry">
-  <div class="form-wrap">
-    <div class="form-card">
-      <div class="form-title">Log a trade</div>
-      <div class="mode-toggle">
-        <button class="mode-btn active" onclick="setMode('futures',this)">Futures</button>
-        <button class="mode-btn" onclick="setMode('options',this)">Options</button>
+<!-- LOG -->
+
+<div class="page" id="page-log">
+  <div class="form-header">Log a trade</div>
+  <div class="form-sub">Submits directly to your Google Sheet</div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="setMode('futures',this)">Futures</button>
+    <button class="mode-btn" onclick="setMode('options',this)">Options</button>
+  </div>
+
+  <div id="futures-form">
+    <div class="form-section">
+      <div class="form-section-title">Position</div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="field"><label>Date</label><input type="date" id="f-date"></div>
+        <div class="field"><label>Ticker</label><select id="f-ticker"><option>MES</option><option>ES</option></select></div>
       </div>
-      <div id="futures-form">
-        <div class="form-row">
-          <div class="field"><label>Date</label><input type="date" id="f-date"></div>
-          <div class="field"><label>Ticker</label><select id="f-ticker"><option>MES</option><option>ES</option></select></div>
-        </div>
-        <div class="form-row three">
-          <div class="field"><label>Trade #</label><input type="number" id="f-tradenum" placeholder="1" inputmode="numeric"></div>
-          <div class="field"><label>Type</label><select id="f-type"><option>open</option><option>close</option><option>scale in</option><option>trim</option></select></div>
-          <div class="field"><label>Side</label><select id="f-side"><option>long</option><option>short</option></select></div>
-        </div>
-        <div class="form-row three">
-          <div class="field"><label>Price</label><input type="number" id="f-price" step="0.25" placeholder="6450" inputmode="decimal"></div>
-          <div class="field"><label>QTY</label><input type="number" id="f-qty" placeholder="2" inputmode="numeric"></div>
-          <div class="field"><label>Matched Row</label><input type="number" id="f-matchrow" placeholder="blank if open" inputmode="numeric"></div>
-        </div>
-        <div class="form-row full">
-          <div class="field"><label>Setup</label><select id="f-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>Other</option></select></div>
-        </div>
-        <div class="form-row full">
-          <div class="field"><label>Notes</label><textarea id="f-notes" placeholder="What you saw. Why you entered or exited."></textarea></div>
-        </div>
-        <div class="form-row full">
-          <div class="field"><label>Execution Quality</label><select id="f-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div>
-        </div>
+      <div class="form-row three">
+        <div class="field"><label>Trade #</label><input type="number" id="f-tradenum" placeholder="1" inputmode="numeric"></div>
+        <div class="field"><label>Type</label><select id="f-type"><option>open</option><option>close</option><option>scale in</option><option>trim</option></select></div>
+        <div class="field"><label>Side</label><select id="f-side"><option>long</option><option>short</option></select></div>
       </div>
-      <div id="options-form" style="display:none">
-        <div class="form-row">
-          <div class="field"><label>Date</label><input type="date" id="o-date"></div>
-          <div class="field"><label>Ticker</label><select id="o-ticker"><option>SPY</option><option>SPX</option><option>QQQ</option></select></div>
-        </div>
-        <div class="form-row three">
-          <div class="field"><label>Strike</label><input type="number" id="o-strike" placeholder="680" inputmode="numeric"></div>
-          <div class="field"><label>Side</label><select id="o-side"><option>call</option><option>put</option></select></div>
-          <div class="field"><label>QTY</label><input type="number" id="o-qty" placeholder="10" inputmode="numeric"></div>
-        </div>
-        <div class="form-row three">
-          <div class="field"><label>Expiry</label><input type="date" id="o-exp"></div>
-          <div class="field"><label>Avg Entry $</label><input type="number" id="o-entry" step="0.01" placeholder="0.45" inputmode="decimal"></div>
-          <div class="field"><label>Avg Exit $</label><input type="number" id="o-exit" step="0.01" placeholder="0.89" inputmode="decimal"></div>
-        </div>
-        <div class="form-row full">
-          <div class="field"><label>Setup</label><select id="o-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>0DTE Momentum</option><option>Other</option></select></div>
-        </div>
-        <div class="form-row full">
-          <div class="field"><label>Notes</label><textarea id="o-notes" placeholder="What you saw. Why you entered or exited."></textarea></div>
-        </div>
-        <div class="form-row full">
-          <div class="field"><label>Execution Quality</label><select id="o-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div>
-        </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Execution</div>
+      <div class="form-row three" style="margin-bottom:10px">
+        <div class="field"><label>Price</label><input type="number" id="f-price" step="0.25" placeholder="6450" inputmode="decimal"></div>
+        <div class="field"><label>QTY</label><input type="number" id="f-qty" placeholder="2" inputmode="numeric"></div>
+        <div class="field"><label>Matched Row</label><input type="number" id="f-matchrow" placeholder="blank=open" inputmode="numeric"></div>
       </div>
-      <button class="submit-btn" id="submit-btn" onclick="submitTrade()">Submit to Sheet</button>
-      <div class="form-msg" id="form-msg"></div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="field"><label>Setup</label><select id="f-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>Other</option></select></div>
+        <div class="field"><label>Exec Quality</label><select id="f-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div>
+      </div>
+      <div class="form-row full">
+        <div class="field"><label>Notes</label><textarea id="f-notes" placeholder="What you saw. Why you entered or exited."></textarea></div>
+      </div>
     </div>
   </div>
+
+  <div id="options-form" style="display:none">
+    <div class="form-section">
+      <div class="form-section-title">Contract</div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="field"><label>Date</label><input type="date" id="o-date"></div>
+        <div class="field"><label>Ticker</label><select id="o-ticker"><option>SPY</option><option>SPX</option><option>QQQ</option></select></div>
+      </div>
+      <div class="form-row three">
+        <div class="field"><label>Strike</label><input type="number" id="o-strike" placeholder="680" inputmode="numeric"></div>
+        <div class="field"><label>Side</label><select id="o-side"><option>call</option><option>put</option></select></div>
+        <div class="field"><label>QTY</label><input type="number" id="o-qty" placeholder="10" inputmode="numeric"></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Fill</div>
+      <div class="form-row three" style="margin-bottom:10px">
+        <div class="field"><label>Expiry</label><input type="date" id="o-exp"></div>
+        <div class="field"><label>Avg Entry</label><input type="number" id="o-entry" step="0.01" placeholder="0.45" inputmode="decimal"></div>
+        <div class="field"><label>Avg Exit</label><input type="number" id="o-exit" step="0.01" placeholder="0.89" inputmode="decimal"></div>
+      </div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="field"><label>Setup</label><select id="o-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>0DTE Momentum</option><option>Other</option></select></div>
+        <div class="field"><label>Exec Quality</label><select id="o-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div>
+      </div>
+      <div class="form-row full">
+        <div class="field"><label>Notes</label><textarea id="o-notes" placeholder="What you saw. Why you entered or exited."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+<button class="submit-btn" id="submit-btn" onclick="submitTrade()">Submit to Sheet</button>
+
+  <div class="form-msg" id="form-msg"></div>
 </div>
 
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbx8Cv6xpAxGB0La3SJJ8uuTuGrgjDuFa_J-SF0sTFM-wIO11fc_08XRPu6rQT3VAtrW/exec';
-let mode='futures',rawData=null;
+let mode='futures',rawData=null,showAllFut=false,showAllOpt=false;
 
-function setTodayDates(){
-  const t=new Date().toISOString().split('T')[0];
-  ['f-date','o-date','o-exp'].forEach(id=>{const el=document.getElementById(id);if(el&&!el.value)el.value=t;});
-}
-setTodayDates();
+(()=>{const t=new Date().toISOString().split('T')[0];['f-date','o-date','o-exp'].forEach(id=>{const el=document.getElementById(id);if(el&&!el.value)el.value=t;});})();
 
 function showPage(p,el){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
-  if(el)el.classList.add('active');
-}
-function showPageMobile(p,el){
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  document.querySelectorAll('.bnav-item').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn,.desktop-tab').forEach(x=>x.classList.remove('active'));
   if(el)el.classList.add('active');
   window.scrollTo(0,0);
 }
@@ -294,44 +316,57 @@ function setMode(m,el){
   document.getElementById('options-form').style.display=m==='options'?'block':'none';
 }
 
-const fmt=n=>{if(n===null||n===undefined||n==='')return'—';const v=parseFloat(n);if(isNaN(v))return'—';return(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});};
-const fmtPct=n=>{if(n===null||n===undefined||n==='')return'—';const v=parseFloat(n);if(isNaN(v))return'—';return(v>=0?'+':'')+(v*100).toFixed(1)+'%';};
-const fmtDate=d=>{if(!d)return'—';const dt=new Date(d);if(isNaN(dt))return String(d).slice(0,5);return(dt.getUTCMonth()+1)+'/'+(dt.getUTCDate());};
-const pips=n=>{let h='<div class="pips">';for(let i=1;i<=5;i++)h+=`<div class="pip${i<=n?' on':''}"></div>`;return h+'</div>';};
-const sideTag=s=>{const c=s?s.toLowerCase().replace(/\s/g,''):'';return`<span class="tag ${c}">${s||'—'}</span>`;};
-const typeTag=t=>{const c=t?t.toLowerCase().replace(/\s/g,''):'';return`<span class="tag ${c}">${t||'—'}</span>`;};
-const setupColors={'FVG Reclaim':'#a78bfa','Liquidity Sweep':'#5eead4','Fractal Confirm':'#e879f9','Equal Levels':'#fcd34d','Dealer Hedge Level':'#7dd3fc','0DTE Momentum':'#60a5fa','Other':'#888','Untagged':'#444'};
+const fmt=n=>{if(n===null||n===undefined||n==='')return null;const v=parseFloat(n);if(isNaN(v))return null;return(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});};
+const fmtPct=n=>{if(n===null||n===undefined||n==='')return null;const v=parseFloat(n);if(isNaN(v))return null;return(v>=0?'+':'')+(v*100).toFixed(1)+'%';};
+const fmtD=d=>{if(!d)return'—';const dt=new Date(d);if(isNaN(dt))return String(d).slice(0,5);return(dt.getUTCMonth()+1)+'/'+(dt.getUTCDate());};
+const plClass=n=>{const v=parseFloat(n);return isNaN(v)?'na':v>=0?'pos':'neg';};
+const pips=n=>{if(!n)return'';let h='<div class="pips">';for(let i=1;i<=5;i++)h+=`<div class="pip${i<=parseInt(n)?' on':''}"></div>`;return h+'</div>';};
+const tag=(cls,txt)=>`<span class="tag ${cls}">${txt}</span>`;
+const sTag=s=>{if(!s)return'';const c=s.toLowerCase().replace(/\s/g,'');return tag(c,s);};
+const tTag=t=>{if(!t)return'';const c=t.toLowerCase().replace(/\s/g,'');return tag(c,t);};
+const setupColors={'FVG Reclaim':'#9d7fea','Liquidity Sweep':'#3ecfcf','Fractal Confirm':'#e879f9','Equal Levels':'#f5a623','Dealer Hedge Level':'#5b9cf6','0DTE Momentum':'#3ddc84','Other':'#555','Untagged':'#333'};
 
-function makeCards(rows,fn){
-  return rows.map(r=>{
-    const f=fn(r);
-    const pc=parseFloat(f.pl)>=0?'pos':'neg';
-    return`<div class="trade-card">
-      <div class="tc-top"><span class="tc-ticker">${f.ticker}</span><span class="tc-pl ${pc}">${fmt(f.pl)}</span></div>
-      <div class="tc-mid">${(f.tags||[]).join('')}</div>
-      <div class="tc-bot"><span class="tc-date">${f.date}</span><div style="display:flex;align-items:center;gap:8px">${f.meta?`<span class="tc-meta">${f.meta}</span>`:''} ${f.exec?pips(parseInt(f.exec)):''}</div></div>
-      ${f.note?`<div class="tc-note">${f.note}</div>`:''}
-    </div>`;
-  }).join('');
+function tradeCard(fields){
+  const f=fields;
+  const p=fmt(f.pl);
+  const pc=plClass(f.pl);
+  return`<div class="trade-card">
+    <div class="tc-row1">
+      <span class="tc-ticker">${f.ticker}</span>
+      <span class="tc-pl ${pc}">${p||'—'}</span>
+    </div>
+    <div class="tc-row2">${(f.tags||[]).join('')}</div>
+    <div class="tc-row3">
+      <span class="tc-date">${f.date}</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        ${f.meta?`<span class="tc-meta">${f.meta}</span>`:''}
+        ${pips(f.exec)}
+      </div>
+    </div>
+    ${f.note?`<div class="tc-note">${f.note}</div>`:''}
+  </div>`;
 }
 
 async function loadData(){
-  const s=document.getElementById('sync-status');
-  const ms=document.getElementById('mobile-sync-label');
-  s.textContent='Syncing...';if(ms)ms.textContent='...';
+  setSyncState('loading');
   try{
     const r=await fetch(SCRIPT_URL);
     rawData=await r.json();
-    const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    s.textContent='Synced '+t;if(ms)ms.textContent='Synced';
+    setSyncState('ok');
     renderDash();renderFutures();renderOptions();
-  }catch(e){s.textContent='Sync failed';if(ms)ms.textContent='Failed';}
+  }catch(e){setSyncState('fail');}
+}
+function setSyncState(s){
+  const dot=document.getElementById('sync-dot');
+  const time=document.getElementById('sync-time');
+  dot.className='sync-dot'+(s==='fail'?' fail':s==='loading'?' loading':'');
+  time.textContent=s==='ok'?new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):s==='loading'?'syncing...':'failed';
 }
 
 function renderDash(){
   if(!rawData)return;
-  const futRows=rawData.futures.slice(1).filter(r=>r[3]==='close'&&r[8]!=='');
-  const futPLs=futRows.map(r=>parseFloat(r[8])||0);
+  const futClose=rawData.futures.slice(1).filter(r=>r[3]==='close'&&r[8]!=='');
+  const futPLs=futClose.map(r=>parseFloat(r[8])||0);
   const futTotal=futPLs.reduce((a,b)=>a+b,0);
   const futWins=futPLs.filter(v=>v>0).length;
   const futWR=futPLs.length?Math.round(futWins/futPLs.length*100):0;
@@ -341,81 +376,109 @@ function renderDash(){
   const optWins=optPLs.filter(v=>v>0).length;
   const optWR=optPLs.length?Math.round(optWins/optPLs.length*100):0;
   const combined=futTotal+optTotal;
+
   const setups={};
-  rawData.futures.slice(1).filter(r=>r[3]==='close'&&r[8]!=='').forEach(r=>{
+  futClose.forEach(r=>{
     const s=r[11]||'Untagged';
     if(!setups[s])setups[s]={wins:0,total:0,pl:0};
     setups[s].total++;setups[s].pl+=parseFloat(r[8])||0;
     if((parseFloat(r[8])||0)>0)setups[s].wins++;
   });
   const maxPL=Math.max(...Object.values(setups).map(s=>Math.abs(s.pl)),1);
-  const recentFut=[...rawData.futures.slice(1)].reverse().slice(0,8);
-  const recentOpt=[...optRows].reverse().slice(0,6);
+
+  const recentFut=[...rawData.futures.slice(1)].reverse().slice(0,showAllFut?999:5);
+  const recentOpt=[...optRows].reverse().slice(0,showAllOpt?999:5);
+  const totalFut=rawData.futures.slice(1).length;
+  const totalOpt=optRows.length;
 
   document.getElementById('dash-content').innerHTML=`
-    <div class="stat-grid">
-      <div class="stat" style="grid-column:1/-1;background:var(--s2)">
-        <div class="stat-label">Combined P/L</div>
-        <div class="stat-val ${combined>=0?'pos':'neg'}">${fmt(combined)}</div>
-        <div class="stat-sub">futures + options</div>
-      </div>
-      <div class="stat"><div class="stat-label">Futures P/L</div><div class="stat-val ${futTotal>=0?'pos':'neg'}">${fmt(futTotal)}</div><div class="stat-sub">${futPLs.length} trades · ${futWR}% WR</div></div>
-      <div class="stat"><div class="stat-label">Options P/L</div><div class="stat-val ${optTotal>=0?'pos':'neg'}">${fmt(optTotal)}</div><div class="stat-sub">${optPLs.length} trades · ${optWR}% WR</div></div>
-      <div class="stat"><div class="stat-label">Fut Win Rate</div><div class="stat-val">${futWR}%</div><div class="stat-sub">${futWins}W / ${futPLs.length-futWins}L</div></div>
-      <div class="stat"><div class="stat-label">Opt Win Rate</div><div class="stat-val">${optWR}%</div><div class="stat-sub">${optWins}W / ${optPLs.length-optWins}L</div></div>
+    <div class="hero">
+      <div class="hero-label">Combined P/L</div>
+      <div class="hero-val ${combined>=0?'pos':'neg'}">${fmt(combined)||'$0.00'}</div>
+      <div class="hero-sub">${futPLs.length + optPLs.length} total trades this period</div>
     </div>
-    <div class="two-col">
-      <div>
-        <div class="sec">Recent Futures</div>
-        <div class="mobile-only">${makeCards(recentFut,r=>({ticker:r[1]||'—',pl:r[8],tags:[typeTag(r[3]),sideTag(r[4])],meta:r[5]?`@ ${r[5]}`:'',date:fmtDate(r[0]),exec:r[13]||'',note:r[12]||''}))}</div>
-        <div class="desktop-only table-wrap"><table><thead><tr><th>Date</th><th>Ticker</th><th>Type</th><th>Price</th><th>P/L</th><th>Pts</th></tr></thead><tbody>
-          ${recentFut.map(r=>`<tr><td class="mono" style="color:var(--t3)">${fmtDate(r[0])}</td><td style="font-weight:500;font-family:'JetBrains Mono',monospace">${r[1]||'—'}</td><td>${typeTag(r[3])}</td><td class="mono">${r[5]||'—'}</td><td class="mono ${parseFloat(r[8])>=0?'pos':'neg'}">${r[8]!==''?fmt(r[8]):'—'}</td><td class="mono" style="color:var(--t2)">${r[9]||'—'}</td></tr>`).join('')}
-        </tbody></table></div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-label">Futures P/L</div>
+        <div class="stat-val ${futTotal>=0?'pos':'neg'}">${fmt(futTotal)||'—'}</div>
+        <div class="stat-sub">${futWR}% win rate · ${futPLs.length} trades</div>
       </div>
-      <div>
-        <div class="sec">Recent Options</div>
-        <div class="mobile-only">${makeCards(recentOpt,r=>({ticker:r[1]||'—',pl:r[8],tags:[sideTag(r[4]),`<span class="tag open">${r[3]||''}</span>`],meta:`$${parseFloat(r[6]||0).toFixed(2)}→$${parseFloat(r[7]||0).toFixed(2)}`,date:fmtDate(r[0]),exec:r[13]||'',note:r[12]||''}))}</div>
-        <div class="desktop-only table-wrap"><table><thead><tr><th>Date</th><th>Side</th><th>Strike</th><th>Entry</th><th>Exit</th><th>P/L</th></tr></thead><tbody>
-          ${recentOpt.map(r=>`<tr><td class="mono" style="color:var(--t3)">${fmtDate(r[0])}</td><td>${sideTag(r[4])}</td><td class="mono">${r[3]||'—'}</td><td class="mono">$${parseFloat(r[6]||0).toFixed(2)}</td><td class="mono">$${parseFloat(r[7]||0).toFixed(2)}</td><td class="mono ${parseFloat(r[8])>=0?'pos':'neg'}">${fmt(r[8])}</td></tr>`).join('')}
-        </tbody></table></div>
+      <div class="stat-card">
+        <div class="stat-label">Options P/L</div>
+        <div class="stat-val ${optTotal>=0?'pos':'neg'}">${fmt(optTotal)||'—'}</div>
+        <div class="stat-sub">${optWR}% win rate · ${optPLs.length} trades</div>
       </div>
     </div>
-    ${Object.keys(setups).length>0?`<div class="sec">Setup breakdown</div><div class="breakdown">${Object.entries(setups).map(([name,s])=>{const wr=Math.round(s.wins/s.total*100);const col=s.pl>=0?'var(--green)':'var(--red)';const barW=Math.round(Math.abs(s.pl)/maxPL*100);return`<div class="setup-row"><span class="setup-name"><span style="width:7px;height:7px;border-radius:50%;background:${setupColors[name]||'#888'};display:inline-block;flex-shrink:0"></span>${name}</span><div class="bar-track"><div class="bar-fill" style="width:${barW}%;background:${col}"></div></div><span class="setup-wr">${wr}%</span><span class="setup-pl ${s.pl>=0?'pos':'neg'}">${fmt(s.pl)}</span></div>`;}).join('')}</div>`:''}
+
+    <div class="sec-header">
+      <span class="sec-title">Recent Futures</span>
+      ${totalFut>5?`<button class="sec-action" onclick="toggleFut()">${showAllFut?'Show less':'See all '+totalFut}</button>`:''}
+    </div>
+    <div id="fut-cards">
+      ${recentFut.map(r=>tradeCard({ticker:r[1]||'—',pl:r[8],tags:[tTag(r[3]),sTag(r[4]),r[11]?tag('setup',r[11]):''],meta:r[5]?`@ ${r[5]}`:'',date:fmtD(r[0]),exec:r[13],note:r[12]||''})).join('')}
+    </div>
+
+    <div class="sec-header">
+      <span class="sec-title">Recent Options</span>
+      ${totalOpt>5?`<button class="sec-action" onclick="toggleOpt()">${showAllOpt?'Show less':'See all '+totalOpt}</button>`:''}
+    </div>
+    <div id="opt-cards">
+      ${recentOpt.map(r=>tradeCard({ticker:r[1]||'—',pl:r[8],tags:[sTag(r[4]),tag('open',r[3]||''),r[11]?tag('setup',r[11]):''],meta:`$${parseFloat(r[6]||0).toFixed(2)}→$${parseFloat(r[7]||0).toFixed(2)}`,date:fmtD(r[0]),exec:r[13],note:r[12]||''})).join('')}
+    </div>
+
+    ${Object.keys(setups).length>0?`
+    <div class="sec-header"><span class="sec-title">Setup Breakdown</span></div>
+    <div class="breakdown-card">
+      ${Object.entries(setups).map(([name,s])=>{
+        const wr=Math.round(s.wins/s.total*100);
+        const col=s.pl>=0?'var(--green)':'var(--red)';
+        const barW=Math.round(Math.abs(s.pl)/maxPL*100);
+        const p=fmt(s.pl);
+        return`<div class="setup-row">
+          <div class="setup-dot" style="background:${setupColors[name]||'#555'}"></div>
+          <span class="setup-name">${name}</span>
+          <div class="bar-track"><div class="bar-fill" style="width:${barW}%;background:${col}"></div></div>
+          <span class="setup-wr">${wr}%</span>
+          <span class="setup-pl ${s.pl>=0?'pos':'neg'}">${p||'—'}</span>
+        </div>`;
+      }).join('')}
+    </div>`:''}
   `;
 }
 
+function toggleFut(){showAllFut=!showAllFut;renderDash();}
+function toggleOpt(){showAllOpt=!showAllOpt;renderDash();}
+
 function renderFutures(){
   if(!rawData)return;
-  const rows=rawData.futures.slice(1);
-  const rev=[...rows].reverse();
+  const rows=[...rawData.futures.slice(1)].reverse();
   document.getElementById('futures-content').innerHTML=`
-    <div class="sec">Personal Futures — all legs</div>
-    <div class="mobile-only">${makeCards(rev,r=>({ticker:r[1]||'—',pl:r[8],tags:[`<span style="font-size:10px;color:var(--t3);font-family:'JetBrains Mono',monospace">#${r[2]}</span>`,typeTag(r[3]),sideTag(r[4])],meta:`@ ${r[5]||'—'} × ${r[6]||'—'}`,date:fmtDate(r[0]),exec:r[13]||'',note:r[12]||''}))}</div>
-    <div class="desktop-only table-wrap"><table><thead><tr><th>Date</th><th>Ticker</th><th>Trade #</th><th>Type</th><th>Side</th><th>Price</th><th>QTY</th><th>Mtch</th><th>P/L $</th><th>Pts</th></tr></thead><tbody>
-      ${rows.map(r=>`<tr><td class="mono" style="color:var(--t3)">${fmtDate(r[0])}</td><td style="font-weight:500;font-family:'JetBrains Mono',monospace">${r[1]||'—'}</td><td class="mono" style="color:var(--t2)">${r[2]||'—'}</td><td>${typeTag(r[3])}</td><td>${sideTag(r[4])}</td><td class="mono">${r[5]||'—'}</td><td class="mono" style="color:var(--t2)">${r[6]||'—'}</td><td class="mono" style="color:var(--t3)">${r[7]||'—'}</td><td class="mono ${parseFloat(r[8])>=0?'pos':'neg'}">${r[8]!==''?fmt(r[8]):'—'}</td><td class="mono" style="color:var(--t2)">${r[9]||'—'}</td></tr>`).join('')}
-    </tbody></table></div>`;
+    <div class="sec-header"><span class="sec-title">All Futures Legs (${rows.length})</span></div>
+    ${rows.map(r=>tradeCard({ticker:r[1]||'—',pl:r[8],tags:[`<span style="font-size:10px;color:var(--t3);font-family:'JetBrains Mono',monospace;padding:3px 6px;background:var(--c2);border-radius:4px">#${r[2]}</span>`,tTag(r[3]),sTag(r[4])],meta:`@ ${r[5]||'—'} × ${r[6]||'—'}`,date:fmtD(r[0]),exec:r[13],note:r[12]||''})).join('')}
+  `;
 }
 
 function renderOptions(){
   if(!rawData)return;
-  const rows=rawData.options.slice(1).filter(r=>r[0]);
-  const rev=[...rows].reverse();
+  const rows=[...rawData.options.slice(1).filter(r=>r[0])].reverse();
   document.getElementById('options-content').innerHTML=`
-    <div class="sec">Robinhood Options — all trades</div>
-    <div class="mobile-only">${makeCards(rev,r=>({ticker:r[1]||'—',pl:r[8],tags:[sideTag(r[4]),`<span class="tag open">${r[3]||''}</span>`],meta:`$${parseFloat(r[6]||0).toFixed(2)}→$${parseFloat(r[7]||0).toFixed(2)} (${r[2]}x)`,date:fmtDate(r[0]),exec:r[13]||'',note:r[12]||''}))}</div>
-    <div class="desktop-only table-wrap"><table><thead><tr><th>Date</th><th>Ticker</th><th>QTY</th><th>Strike</th><th>Side</th><th>Exp</th><th>Entry</th><th>Exit</th><th>P/L $</th><th>P/L %</th></tr></thead><tbody>
-      ${rows.map(r=>`<tr><td class="mono" style="color:var(--t3)">${fmtDate(r[0])}</td><td style="font-weight:500;font-family:'JetBrains Mono',monospace">${r[1]||'—'}</td><td class="mono" style="color:var(--t2)">${r[2]||'—'}</td><td class="mono">${r[3]||'—'}</td><td>${sideTag(r[4])}</td><td class="mono" style="color:var(--t3)">${fmtDate(r[5])}</td><td class="mono">$${parseFloat(r[6]||0).toFixed(2)}</td><td class="mono">$${parseFloat(r[7]||0).toFixed(2)}</td><td class="mono ${parseFloat(r[8])>=0?'pos':'neg'}">${fmt(r[8])}</td><td class="mono ${parseFloat(r[9])>=0?'pos':'neg'}">${fmtPct(r[9])}</td></tr>`).join('')}
-    </tbody></table></div>`;
+    <div class="sec-header"><span class="sec-title">All Options Trades (${rows.length})</span></div>
+    ${rows.map(r=>{
+      const p=fmt(r[8]);const pct=fmtPct(r[9]);
+      return tradeCard({ticker:r[1]||'—',pl:r[8],tags:[sTag(r[4]),tag('open',r[3]||''),`<span style="font-size:10px;color:var(--t3);padding:3px 6px;background:var(--c2);border-radius:4px">exp ${fmtD(r[5])}</span>`],meta:`$${parseFloat(r[6]||0).toFixed(2)}→$${parseFloat(r[7]||0).toFixed(2)} · ${pct||''}`,date:fmtD(r[0]),exec:r[13],note:r[12]||''});
+    }).join('')}
+  `;
 }
 
 async function submitTrade(){
   const btn=document.getElementById('submit-btn');
   const msg=document.getElementById('form-msg');
   btn.disabled=true;msg.textContent='Submitting...';msg.className='form-msg';
-  const payload=mode==='futures'?{type:'futures',date:document.getElementById('f-date').value,ticker:document.getElementById('f-ticker').value,tradeNum:document.getElementById('f-tradenum').value,legType:document.getElementById('f-type').value,side:document.getElementById('f-side').value,price:document.getElementById('f-price').value,qty:document.getElementById('f-qty').value,matchRow:document.getElementById('f-matchrow').value,setup:document.getElementById('f-setup').value,notes:document.getElementById('f-notes').value,exec:document.getElementById('f-exec').value}:{type:'options',date:document.getElementById('o-date').value,ticker:document.getElementById('o-ticker').value,qty:document.getElementById('o-qty').value,strike:document.getElementById('o-strike').value,side:document.getElementById('o-side').value,exp:document.getElementById('o-exp').value,avgEntry:document.getElementById('o-entry').value,avgExit:document.getElementById('o-exit').value,setup:document.getElementById('o-setup').value,notes:document.getElementById('o-notes').value,exec:document.getElementById('o-exec').value};
+  const p=mode==='futures'?{type:'futures',date:document.getElementById('f-date').value,ticker:document.getElementById('f-ticker').value,tradeNum:document.getElementById('f-tradenum').value,legType:document.getElementById('f-type').value,side:document.getElementById('f-side').value,price:document.getElementById('f-price').value,qty:document.getElementById('f-qty').value,matchRow:document.getElementById('f-matchrow').value,setup:document.getElementById('f-setup').value,notes:document.getElementById('f-notes').value,exec:document.getElementById('f-exec').value}:{type:'options',date:document.getElementById('o-date').value,ticker:document.getElementById('o-ticker').value,qty:document.getElementById('o-qty').value,strike:document.getElementById('o-strike').value,side:document.getElementById('o-side').value,exp:document.getElementById('o-exp').value,avgEntry:document.getElementById('o-entry').value,avgExit:document.getElementById('o-exit').value,setup:document.getElementById('o-setup').value,notes:document.getElementById('o-notes').value,exec:document.getElementById('o-exec').value};
   try{
-    await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'},mode:'no-cors'});
-    msg.textContent='✓ Submitted — syncing...';msg.className='form-msg ok';
+    await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(p),headers:{'Content-Type':'application/json'},mode:'no-cors'});
+    msg.textContent='✓ Submitted successfully';msg.className='form-msg ok';
     setTimeout(()=>{loadData();msg.textContent='';btn.disabled=false;},1500);
   }catch(e){msg.textContent='Error — check connection';msg.className='form-msg err';btn.disabled=false;}
 }
