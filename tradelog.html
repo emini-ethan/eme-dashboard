@@ -9,155 +9,140 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#080808;
-  --c1:#0f0f0f;--c2:#141414;--c3:#1a1a1a;--c4:#222;
+  --bg:#080808;--c1:#0f0f0f;--c2:#141414;--c3:#1a1a1a;
   --b1:#1c1c1c;--b2:#282828;--b3:#363636;
   --t1:#f2f2f2;--t2:#666;--t3:#333;
-  --green:#3ddc84;--gdim:#091a10;--gtext:#3ddc84;
-  --red:#ff5f5f;--rdim:#1f0909;--rtext:#ff5f5f;
-  --amber:#f5a623;--adim:#1f160a;--atext:#f5a623;
-  --silver:#c8c8c8;--sdim:#1e1e1e;--stext:#c8c8c8;
+  --green:#3ddc84;--gdim:#091a10;
+  --red:#ff5f5f;--rdim:#1f0909;
+  --amber:#f5a623;--adim:#1f160a;
+  --silver:#c8c8c8;
   --accent:#c8ff00;
   --purple:#9d7fea;--pdim:#160f2a;
-  --teal:#3ecfcf;--tdim:#0a1f1f;
   --r-sm:8px;--r-md:14px;--r-lg:18px;--r-xl:22px;
-  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --sb:env(safe-area-inset-bottom,0px);
 }
-body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Syne',sans-serif;background:#080808;color:#f2f2f2;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .mono{font-family:'JetBrains Mono',monospace}
-.pos{color:var(--green)}.neg{color:var(--red)}
+.pos{color:#3ddc84}.neg{color:#ff5f5f}
 
 /* HEADER */
-.header{padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#080808 !important;z-index:40;border-bottom:1px solid #1c1c1c}
-.header-logo{font-size:14px;font-weight:700;letter-spacing:.06em;color:var(–t1)}
-.header-logo em{color:var(–accent);font-style:normal}
-.header-meta{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
-.header-sync-time{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:var(–t2)}
-.header-sync-date{font-size:10px;font-family:‘JetBrains Mono’,monospace;color:var(–t3)}
-.sync-indicator{display:flex;align-items:center;gap:6px}
-.sync-dot{width:6px;height:6px;border-radius:50%;background:var(–green);flex-shrink:0}
-.sync-dot.fail{background:var(–red)}
-.sync-dot.syncing{background:var(–amber);animation:blink 1s infinite}
+.header{padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#080808;z-index:40;border-bottom:1px solid #1c1c1c}
+.logo{font-size:14px;font-weight:700;letter-spacing:.06em;color:#f2f2f2}
+.logo em{color:#c8ff00;font-style:normal}
+.sync-row{display:flex;align-items:center;gap:8px}
+.sync-meta{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+.sync-time{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:#555}
+.sync-date-txt{font-size:10px;font-family:‘JetBrains Mono’,monospace;color:#333}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#3ddc84;flex-shrink:0}
+.sync-dot.fail{background:#ff5f5f}
+.sync-dot.busy{background:#f5a623;animation:blink 1s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.sync-btn{background:none;border:none;color:var(–t3);font-size:16px;cursor:pointer;padding:2px 4px;line-height:1}
+.sync-btn{background:none;border:none;color:#444;font-size:16px;cursor:pointer;line-height:1;padding:2px 4px}
 
 /* BOTTOM NAV */
-.bnav{position:fixed;bottom:0;left:0;right:0;background:#0f0f0f;border-top:1px solid #282828;z-index:50;padding-bottom:var(–safe-bottom);-webkit-backdrop-filter:none;backdrop-filter:none}
-.bnav-inner{display:flex;height:58px;width:100%;max-width:360px;margin:0 auto;justify-content:center}
-.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;color:#3a3a3a;font-family:‘Syne’,sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.03em;max-width:90px}
-.bnav-btn.active{color:#c8ff00 !important}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#0f0f0f;border-top:1px solid #282828;z-index:100;padding-bottom:var(–sb)}
+.bnav-inner{display:flex;height:58px;width:280px;margin:0 auto}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;color:#333;font-family:‘Syne’,sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.03em;padding:0}
+.bnav-btn.active{color:#c8ff00}
 .bnav-btn svg{width:19px;height:19px;stroke-width:1.7;fill:none;stroke:currentColor}
-.bnav-log-pill{background:#c8ff00;color:#000;border-radius:10px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.bnav-log{background:#c8ff00;color:#000;border-radius:10px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.04em;white-space:nowrap}
 
 /* PAGES */
-.page{display:none;padding:16px 16px 90px;animation:fadeUp .15s ease}
+.page{display:none;padding:16px 16px 90px}
 .page.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* HERO */
-.hero{background:var(–c1);border:1px solid var(–b2);border-radius:var(–r-xl);padding:22px 20px 20px;margin-bottom:12px}
-.hero-label{font-size:10px;font-weight:700;color:var(–t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.hero{background:#0f0f0f;border:1px solid #282828;border-radius:22px;padding:22px 20px 20px;margin-bottom:12px}
+.hero-label{font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
 .hero-amount{font-size:38px;font-weight:700;font-family:‘JetBrains Mono’,monospace;line-height:1;margin-bottom:5px}
-.hero-amount.pos{color:var(–green)}.hero-amount.neg{color:var(–red)}
-.hero-sub{font-size:12px;color:var(–t2)}
+.hero-amount.pos{color:#3ddc84}.hero-amount.neg{color:#ff5f5f}
+.hero-sub{font-size:12px;color:#555}
 
-/* STAT ROW */
+/* STAT CARDS */
 .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.stat-card{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:16px 16px 14px}
-.stat-label{font-size:10px;font-weight:700;color:var(–t3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:7px}
+.stat-card{background:#0f0f0f;border:1px solid #1c1c1c;border-radius:18px;padding:16px}
+.stat-label{font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.09em;margin-bottom:7px}
 .stat-val{font-size:21px;font-weight:700;font-family:‘JetBrains Mono’,monospace;line-height:1}
-.stat-val.pos{color:var(–green)}.stat-val.neg{color:var(–red)}
+.stat-val.pos{color:#3ddc84}.stat-val.neg{color:#ff5f5f}
 .stat-meta{display:flex;gap:10px;margin-top:6px}
-.stat-meta-item{font-size:11px;color:var(–t2)}
-.stat-meta-item span{color:var(–t1);font-weight:600}
+.stat-meta span{font-size:11px;color:#555}
+.stat-meta b{color:#f2f2f2;font-weight:600}
 
-/* SEC */
-.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.sec-title{font-size:10px;font-weight:700;color:var(–t2);text-transform:uppercase;letter-spacing:.1em}
-.sec-btn{font-size:11px;color:var(–silver);font-weight:600;cursor:pointer;border:none;background:none;font-family:‘Syne’,sans-serif;padding:0}
+/* SECTION */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;margin-top:20px}
+.sec-title{font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em}
+.sec-btn{font-size:11px;color:#c8c8c8;font-weight:600;cursor:pointer;border:none;background:none;font-family:‘Syne’,sans-serif}
 
-/* TRADE CARD — paired open/close */
-.trade-card{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:15px 16px;margin-bottom:8px}
-.tc-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.tc-left{display:flex;flex-direction:column;gap:3px}
-.tc-ticker{font-size:16px;font-weight:700;letter-spacing:.03em}
-.tc-side{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
-.tc-side.long{color:var(–green)}.tc-side.short{color:var(–red)}
-.tc-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+/* TRADE CARD */
+.tc{background:#0f0f0f;border:1px solid #1c1c1c;border-radius:18px;padding:15px 16px;margin-bottom:8px}
+.tc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.tc-ticker{font-size:16px;font-weight:700;letter-spacing:.02em}
+.tc-side{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.tc-side.long{color:#3ddc84}.tc-side.short{color:#ff5f5f}.tc-side.put{color:#f5a623}.tc-side.call{color:#c8c8c8}
 .tc-pl{font-size:18px;font-weight:700;font-family:‘JetBrains Mono’,monospace}
-.tc-pl.pos{color:var(–green)}.tc-pl.neg{color:var(–red)}
-.tc-pct{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:var(–t2)}
-.tc-prices{display:flex;align-items:center;gap:0;background:var(–c2);border-radius:var(–r-sm);padding:9px 12px;margin-bottom:10px}
-.tc-price-item{display:flex;flex-direction:column;gap:2px;flex:1}
-.tc-price-label{font-size:9px;font-weight:700;color:var(–t3);text-transform:uppercase;letter-spacing:.08em}
-.tc-price-val{font-size:14px;font-weight:500;font-family:‘JetBrains Mono’,monospace;color:var(–t1)}
-.tc-price-div{width:1px;background:var(–b2);margin:0 12px;align-self:stretch}
-.tc-pts{background:var(–c3);border-radius:4px;padding:2px 7px;font-size:11px;font-family:‘JetBrains Mono’,monospace;color:var(–silver);white-space:nowrap}
+.tc-pl.pos{color:#3ddc84}.tc-pl.neg{color:#ff5f5f}
+.tc-pts{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:#555;margin-top:2px;text-align:right}
+.tc-prices{display:flex;background:#141414;border-radius:8px;padding:10px 12px;margin-bottom:10px;gap:0}
+.tc-p{display:flex;flex-direction:column;gap:2px;flex:1}
+.tc-p-label{font-size:9px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.08em}
+.tc-p-val{font-size:14px;font-weight:500;font-family:‘JetBrains Mono’,monospace}
+.tc-div{width:1px;background:#1c1c1c;margin:0 12px}
 .tc-footer{display:flex;align-items:center;justify-content:space-between}
-.tc-date{font-size:11px;color:var(–t3);font-family:‘JetBrains Mono’,monospace}
-.tc-tags{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.tc-date{font-size:11px;color:#333;font-family:‘JetBrains Mono’,monospace}
+.tc-setup{font-size:10px;font-weight:600;color:#555;background:#1a1a1a;border:1px solid #282828;border-radius:20px;padding:2px 8px}
 .pips{display:flex;gap:2px}
-.pip{width:5px;height:5px;border-radius:1px;background:var(–b2)}
-.pip.on{background:var(–accent)}
-.tc-note{font-size:12px;color:var(–t3);margin-top:10px;padding-top:10px;border-top:1px solid var(–b1);line-height:1.6;font-style:italic}
+.pip{width:5px;height:5px;border-radius:1px;background:#1c1c1c}
+.pip.on{background:#c8ff00}
+.tc-note{font-size:12px;color:#3a3a3a;margin-top:10px;padding-top:10px;border-top:1px solid #1a1a1a;line-height:1.6;font-style:italic}
 
-/* OPEN POSITION CARD */
-.open-card{background:var(–c1);border:1px solid var(–b2);border-left:3px solid var(–amber);border-radius:var(–r-lg);padding:14px 16px;margin-bottom:8px}
-.open-label{font-size:9px;font-weight:700;color:var(–amber);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.open-main{display:flex;align-items:center;justify-content:space-between}
+/* OPEN CARD */
+.open-card{background:#0f0f0f;border:1px solid #282828;border-left:3px solid #f5a623;border-radius:18px;padding:14px 16px;margin-bottom:8px}
+.open-label{font-size:9px;font-weight:700;color:#f5a623;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
 .open-ticker{font-size:15px;font-weight:700}
-.open-detail{font-size:12px;color:var(–t2);margin-top:4px}
-
-/* TAGS */
-.tag{display:inline-flex;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.03em}
-.tag.call{background:#0d1520;color:#7aadee}
-.tag.put{background:var(–adim);color:var(–atext)}
-.tag.setup{background:var(–c3);color:var(–t2);border:1px solid var(–b2)}
+.open-detail{font-size:12px;color:#555;margin-top:3px}
 
 /* BREAKDOWN */
-.breakdown-card{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:16px;margin-bottom:8px}
-.setup-row{display:flex;align-items:center;gap:8px;margin-bottom:11px}
-.setup-row:last-child{margin-bottom:0}
-.setup-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.setup-name{font-size:12px;color:var(–t1);font-weight:500;min-width:108px}
-.bar-track{flex:1;height:4px;background:var(–c3);border-radius:2px;overflow:hidden}
-.bar-fill{height:100%;border-radius:2px}
-.setup-wr{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:var(–t3);min-width:28px;text-align:right}
-.setup-pl{font-size:11px;font-family:‘JetBrains Mono’,monospace;min-width:58px;text-align:right;font-weight:500}
+.breakdown{background:#0f0f0f;border:1px solid #1c1c1c;border-radius:18px;padding:16px;margin-bottom:8px}
+.srow{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.srow:last-child{margin-bottom:0}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sname{font-size:12px;color:#f2f2f2;font-weight:500;min-width:108px}
+.sbar{flex:1;height:4px;background:#1a1a1a;border-radius:2px;overflow:hidden}
+.sbar-fill{height:100%;border-radius:2px}
+.swr{font-size:11px;font-family:‘JetBrains Mono’,monospace;color:#333;min-width:28px;text-align:right}
+.spl{font-size:11px;font-family:‘JetBrains Mono’,monospace;min-width:58px;text-align:right;font-weight:500}
 
 /* FORM */
-.form-header{font-size:20px;font-weight:700;margin-bottom:4px}
-.form-sub{font-size:12px;color:var(–t2);margin-bottom:20px}
-.mode-toggle{display:flex;background:var(–c2);border-radius:var(–r-sm);padding:3px;margin-bottom:16px;gap:2px}
-.mode-btn{flex:1;padding:9px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(–t3);font-family:‘Syne’,sans-serif}
-.mode-btn.active{background:var(–c3);color:var(–t1)}
-.form-section{background:var(–c1);border:1px solid var(–b1);border-radius:var(–r-lg);padding:16px;margin-bottom:10px}
-.form-section-title{font-size:10px;font-weight:700;color:var(–t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.form-row.three{grid-template-columns:1fr 1fr 1fr}
-.form-row.full{grid-template-columns:1fr;margin-bottom:0}
-.form-row:last-child{margin-bottom:0}
+.form-hdr{font-size:20px;font-weight:700;margin-bottom:4px}
+.form-sub{font-size:12px;color:#555;margin-bottom:20px}
+.mode-toggle{display:flex;background:#141414;border-radius:8px;padding:3px;margin-bottom:16px;gap:2px}
+.mode-btn{flex:1;padding:9px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:#444;font-family:‘Syne’,sans-serif;transition:all .15s}
+.mode-btn.active{background:#1a1a1a;color:#f2f2f2}
+.fsec{background:#0f0f0f;border:1px solid #1c1c1c;border-radius:18px;padding:16px;margin-bottom:10px}
+.fsec-title{font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.frow.three{grid-template-columns:1fr 1fr 1fr}
+.frow.full{grid-template-columns:1fr;margin-bottom:0}
+.frow:last-child{margin-bottom:0}
 .field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:10px;font-weight:700;color:var(–t3);text-transform:uppercase;letter-spacing:.08em}
-.field input,.field select,.field textarea{padding:11px 12px;border-radius:var(–r-sm);border:1px solid var(–b1);background:var(–c2);color:var(–t1);font-size:14px;font-family:‘Syne’,sans-serif;outline:none;-webkit-appearance:none;transition:border-color .15s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(–accent)}
+.field label{font-size:10px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:.08em}
+.field input,.field select,.field textarea{padding:11px 12px;border-radius:8px;border:1px solid #1c1c1c;background:#141414;color:#f2f2f2;font-size:14px;font-family:‘Syne’,sans-serif;outline:none;-webkit-appearance:none;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#c8ff00}
 .field select{background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘10’ height=‘6’ viewBox=‘0 0 10 6’%3E%3Cpath fill=’%23444’ d=‘M0 0l5 6 5-6z’/%3E%3C/svg%3E”);background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-.field select option{background:var(–c2)}
+.field select option{background:#141414}
 .field textarea{resize:none;height:78px;line-height:1.5}
-.submit-btn{width:100%;padding:15px;border-radius:var(–r-md);background:var(–accent);color:#000;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:‘Syne’,sans-serif;letter-spacing:.04em;margin-top:4px}
+.submit-btn{width:100%;padding:15px;border-radius:14px;background:#c8ff00;color:#000;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:‘Syne’,sans-serif;letter-spacing:.04em;margin-top:4px}
 .submit-btn:active{opacity:.8}
 .submit-btn:disabled{opacity:.35;cursor:not-allowed}
 .form-msg{text-align:center;font-size:13px;margin-top:12px;min-height:18px;font-weight:600}
-.form-msg.ok{color:var(–green)}.form-msg.err{color:var(–red)}
-
-.loading{text-align:center;padding:60px 0;color:var(–t3);font-size:13px}
-.empty{text-align:center;padding:30px 0;color:var(–t3);font-size:12px}
+.form-msg.ok{color:#3ddc84}.form-msg.err{color:#ff5f5f}
+.loading{text-align:center;padding:60px 0;color:#333;font-size:13px}
+.empty{text-align:center;padding:24px 0;color:#333;font-size:12px}
 
 @media(min-width:640px){
 .bnav{display:none}
 .page{padding:24px 28px 40px;max-width:860px;margin:0 auto}
 .stat-row{grid-template-columns:repeat(4,1fr)}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 }
 </style>
 
@@ -165,11 +150,11 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--t1);min-heig
 <body>
 
 <div class="header">
-  <div class="header-logo">EMINI<em>-</em>ETHAN</div>
-  <div class="sync-indicator">
-    <div class="header-meta">
-      <span class="header-sync-time" id="sync-time">—</span>
-      <span class="header-sync-date" id="sync-date">—</span>
+  <div class="logo">EMINI<em>-</em>ETHAN</div>
+  <div class="sync-row">
+    <div class="sync-meta">
+      <span class="sync-time" id="sync-time">—</span>
+      <span class="sync-date-txt" id="sync-date">—</span>
     </div>
     <div class="sync-dot" id="sync-dot"></div>
     <button class="sync-btn" onclick="loadData()">↻</button>
@@ -178,459 +163,393 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--t1);min-heig
 
 <div class="bnav">
   <div class="bnav-inner">
-    <button class="bnav-btn active" onclick="showPage('dashboard',this)">
+    <button class="bnav-btn active" onclick="go('dashboard',this)">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-      Dashboard
+      <span>Home</span>
     </button>
-    <button class="bnav-btn" onclick="showPage('futures',this)">
+    <button class="bnav-btn" onclick="go('futures',this)">
       <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-      Futures
+      <span>Futures</span>
     </button>
-    <button class="bnav-btn" onclick="showPage('options',this)">
+    <button class="bnav-btn" onclick="go('options',this)">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
-      Options
+      <span>Options</span>
     </button>
-    <button class="bnav-btn" onclick="showPage('log',this)">
-      <span class="bnav-log-pill">+ Log</span>
+    <button class="bnav-btn" onclick="go('log',this)">
+      <span class="bnav-log">+ Log</span>
     </button>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-
-<div class="page active" id="page-dashboard">
-  <div id="dash-content"><div class="loading">Syncing...</div></div>
-</div>
-
-<!-- FUTURES -->
-
-<div class="page" id="page-futures">
-  <div id="futures-content"><div class="loading">Loading...</div></div>
-</div>
-
-<!-- OPTIONS -->
-
-<div class="page" id="page-options">
-  <div id="options-content"><div class="loading">Loading...</div></div>
-</div>
-
-<!-- LOG -->
+<div class="page active" id="page-dashboard"><div id="dash-content"><div class="loading">Loading...</div></div></div>
+<div class="page" id="page-futures"><div id="fut-content"><div class="loading">Loading...</div></div></div>
+<div class="page" id="page-options"><div id="opt-content"><div class="loading">Loading...</div></div></div>
 
 <div class="page" id="page-log">
-  <div class="form-header">Log a trade</div>
-  <div class="form-sub">Submits directly to your Google Sheet</div>
+  <div class="form-hdr">Log a trade</div>
+  <div class="form-sub">Goes straight to your Google Sheet</div>
   <div class="mode-toggle">
     <button class="mode-btn active" onclick="setMode('futures',this)">Futures</button>
     <button class="mode-btn" onclick="setMode('options',this)">Options</button>
   </div>
-  <div id="futures-form">
-    <div class="form-section">
-      <div class="form-section-title">Position</div>
-      <div class="form-row">
-        <div class="field"><label>Date</label><input type="date" id="f-date"></div>
-        <div class="field"><label>Ticker</label><select id="f-ticker"><option>MES</option><option>ES</option></select></div>
-      </div>
-      <div class="form-row three">
-        <div class="field"><label>Trade #</label><input type="number" id="f-tradenum" placeholder="1" inputmode="numeric"></div>
-        <div class="field"><label>Type</label><select id="f-type"><option>open</option><option>close</option><option>scale in</option><option>trim</option></select></div>
-        <div class="field"><label>Side</label><select id="f-side"><option>long</option><option>short</option></select></div>
-      </div>
+  <div id="f-form">
+    <div class="fsec">
+      <div class="fsec-title">Position</div>
+      <div class="frow"><div class="field"><label>Date</label><input type="date" id="f-date"></div><div class="field"><label>Ticker</label><select id="f-ticker"><option>MES</option><option>ES</option></select></div></div>
+      <div class="frow three"><div class="field"><label>Trade #</label><input type="number" id="f-num" placeholder="1" inputmode="numeric"></div><div class="field"><label>Type</label><select id="f-type"><option>open</option><option>close</option><option>scale in</option><option>trim</option></select></div><div class="field"><label>Side</label><select id="f-side"><option>long</option><option>short</option></select></div></div>
     </div>
-    <div class="form-section">
-      <div class="form-section-title">Execution</div>
-      <div class="form-row three">
-        <div class="field"><label>Price</label><input type="number" id="f-price" step="0.25" placeholder="6450" inputmode="decimal"></div>
-        <div class="field"><label>QTY</label><input type="number" id="f-qty" placeholder="2" inputmode="numeric"></div>
-        <div class="field"><label>Matched Row</label><input type="number" id="f-matchrow" placeholder="blank=open" inputmode="numeric"></div>
-      </div>
-      <div class="form-row">
-        <div class="field"><label>Setup</label><select id="f-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>Other</option></select></div>
-        <div class="field"><label>Exec Quality</label><select id="f-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div>
-      </div>
-      <div class="form-row full">
-        <div class="field"><label>Notes</label><textarea id="f-notes" placeholder="What you saw. Why you entered or exited."></textarea></div>
-      </div>
+    <div class="fsec">
+      <div class="fsec-title">Execution</div>
+      <div class="frow three"><div class="field"><label>Price</label><input type="number" id="f-price" step="0.25" placeholder="6450" inputmode="decimal"></div><div class="field"><label>QTY</label><input type="number" id="f-qty" placeholder="2" inputmode="numeric"></div><div class="field"><label>Matched Row</label><input type="number" id="f-match" placeholder="blank=open" inputmode="numeric"></div></div>
+      <div class="frow"><div class="field"><label>Setup</label><select id="f-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>Other</option></select></div><div class="field"><label>Exec Quality</label><select id="f-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div></div>
+      <div class="frow full"><div class="field"><label>Notes</label><textarea id="f-notes" placeholder="What you saw. Why you entered or exited."></textarea></div></div>
     </div>
   </div>
-  <div id="options-form" style="display:none">
-    <div class="form-section">
-      <div class="form-section-title">Contract</div>
-      <div class="form-row">
-        <div class="field"><label>Date</label><input type="date" id="o-date"></div>
-        <div class="field"><label>Ticker</label><select id="o-ticker"><option>SPY</option><option>SPX</option><option>QQQ</option></select></div>
-      </div>
-      <div class="form-row three">
-        <div class="field"><label>Strike</label><input type="number" id="o-strike" placeholder="680" inputmode="numeric"></div>
-        <div class="field"><label>Side</label><select id="o-side"><option>call</option><option>put</option></select></div>
-        <div class="field"><label>QTY</label><input type="number" id="o-qty" placeholder="10" inputmode="numeric"></div>
-      </div>
+  <div id="o-form" style="display:none">
+    <div class="fsec">
+      <div class="fsec-title">Contract</div>
+      <div class="frow"><div class="field"><label>Date</label><input type="date" id="o-date"></div><div class="field"><label>Ticker</label><select id="o-ticker"><option>SPY</option><option>SPX</option><option>QQQ</option></select></div></div>
+      <div class="frow three"><div class="field"><label>Strike</label><input type="number" id="o-strike" placeholder="680" inputmode="numeric"></div><div class="field"><label>Side</label><select id="o-side"><option>call</option><option>put</option></select></div><div class="field"><label>QTY</label><input type="number" id="o-qty" placeholder="10" inputmode="numeric"></div></div>
     </div>
-    <div class="form-section">
-      <div class="form-section-title">Fill</div>
-      <div class="form-row three">
-        <div class="field"><label>Expiry</label><input type="date" id="o-exp"></div>
-        <div class="field"><label>Avg Entry</label><input type="number" id="o-entry" step="0.01" placeholder="0.45" inputmode="decimal"></div>
-        <div class="field"><label>Avg Exit</label><input type="number" id="o-exit" step="0.01" placeholder="0.89" inputmode="decimal"></div>
-      </div>
-      <div class="form-row">
-        <div class="field"><label>Setup</label><select id="o-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>0DTE Momentum</option><option>Other</option></select></div>
-        <div class="field"><label>Exec Quality</label><select id="o-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div>
-      </div>
-      <div class="form-row full">
-        <div class="field"><label>Notes</label><textarea id="o-notes" placeholder="What you saw. Why you entered or exited."></textarea></div>
-      </div>
+    <div class="fsec">
+      <div class="fsec-title">Fill</div>
+      <div class="frow three"><div class="field"><label>Expiry</label><input type="date" id="o-exp"></div><div class="field"><label>Avg Entry</label><input type="number" id="o-entry" step="0.01" placeholder="0.45" inputmode="decimal"></div><div class="field"><label>Avg Exit</label><input type="number" id="o-exit" step="0.01" placeholder="0.89" inputmode="decimal"></div></div>
+      <div class="frow"><div class="field"><label>Setup</label><select id="o-setup"><option value="">— Select —</option><option>FVG Reclaim</option><option>Liquidity Sweep</option><option>Fractal Confirm</option><option>Equal Levels</option><option>Dealer Hedge Level</option><option>0DTE Momentum</option><option>Other</option></select></div><div class="field"><label>Exec Quality</label><select id="o-exec"><option value="5">5 — Textbook</option><option value="4">4 — Sharp</option><option value="3" selected>3 — Decent</option><option value="2">2 — Hesitated</option><option value="1">1 — Blown</option></select></div></div>
+      <div class="frow full"><div class="field"><label>Notes</label><textarea id="o-notes" placeholder="What you saw. Why you entered or exited."></textarea></div></div>
     </div>
   </div>
-  <button class="submit-btn" id="submit-btn" onclick="submitTrade()">Submit to Sheet</button>
+  <button class="submit-btn" id="sub-btn" onclick="submitTrade()">Submit to Sheet</button>
   <div class="form-msg" id="form-msg"></div>
 </div>
 
 <script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbx8Cv6xpAxGB0La3SJJ8uuTuGrgjDuFa_J-SF0sTFM-wIO11fc_08XRPu6rQT3VAtrW/exec';
-let mode='futures',rawData=null,showAllFut=false,showAllOpt=false;
+const URL='https://script.google.com/macros/s/AKfycbx8Cv6xpAxGB0La3SJJ8uuTuGrgjDuFa_J-SF0sTFM-wIO11fc_08XRPu6rQT3VAtrW/exec';
+let mode='futures',data=null,allFut=false,allOpt=false;
 
-(()=>{const t=new Date().toISOString().split('T')[0];['f-date','o-date','o-exp'].forEach(id=>{const el=document.getElementById(id);if(el&&!el.value)el.value=t;});})();
+// Set today on date fields
+try{const t=new Date().toISOString().split('T')[0];['f-date','o-date','o-exp'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=t;});}catch(e){}
 
-function showPage(p,el){
+function go(p,el){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
   document.querySelectorAll('.bnav-btn').forEach(x=>x.classList.remove('active'));
   if(el)el.classList.add('active');
   window.scrollTo(0,0);
 }
+
 function setMode(m,el){
   mode=m;
   document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
   if(el)el.classList.add('active');
-  document.getElementById('futures-form').style.display=m==='futures'?'block':'none';
-  document.getElementById('options-form').style.display=m==='options'?'block':'none';
+  document.getElementById('f-form').style.display=m==='futures'?'block':'none';
+  document.getElementById('o-form').style.display=m==='options'?'block':'none';
 }
 
-const fmt=n=>{if(n===null||n===undefined||n==='')return null;const v=parseFloat(n);if(isNaN(v))return null;return(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});};
-const fmtPct=n=>{if(n===null||n===undefined||n==='')return null;const v=parseFloat(n);if(isNaN(v))return null;return(v>=0?'+':'')+(v*100).toFixed(1)+'%';};
-const fmtD=d=>{if(!d)return'—';const dt=new Date(d);if(isNaN(dt.getTime()))return String(d).slice(0,5);return(dt.getUTCMonth()+1)+'/'+(dt.getUTCDate());};
-const plCls=n=>{const v=parseFloat(n);return isNaN(v)||n===''?'na':v>=0?'pos':'neg';};
-const pips=n=>{if(!n||n==='')return'';let h='<div class="pips">';for(let i=1;i<=5;i++)h+=`<div class="pip${i<=parseInt(n)?' on':''}"></div>`;return h+'</div>';};
-const setupColors={'FVG Reclaim':'#9d7fea','Liquidity Sweep':'#3ecfcf','Fractal Confirm':'#d466e8','Equal Levels':'#f5a623','Dealer Hedge Level':'#c8c8c8','0DTE Momentum':'#3ddc84','Other':'#444','Untagged':'#2a2a2a'};
+// Helpers
+function fmt(n){
+  try{if(n===null||n===undefined||n==='')return null;const v=parseFloat(n);if(isNaN(v))return null;return(v>=0?'+$':'-$')+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}catch(e){return null;}
+}
+function fmtPct(n){
+  try{if(n===null||n===undefined||n==='')return null;const v=parseFloat(n);if(isNaN(v))return null;return(v>=0?'+':'')+(v*100).toFixed(1)+'%';}catch(e){return null;}
+}
+function fmtD(d){
+  try{if(!d)return'—';const dt=new Date(d);if(isNaN(dt.getTime()))return'—';return(dt.getUTCMonth()+1)+'/'+(dt.getUTCDate());}catch(e){return'—';}
+}
+function plc(n){try{const v=parseFloat(n);return isNaN(v)||n===''?'':'  '+(v>=0?'pos':'neg');}catch(e){return'';}}
+function pips(n){try{if(!n)return'';let h='<div class="pips">';for(let i=1;i<=5;i++)h+=`<div class="pip${i<=parseInt(n)?' on':''}"></div>`;return h+'</div>';}catch(e){return'';}}
 
-// Build a map of trade# -> {open rows, close rows} from futures data
-function buildTradePairs(futRows){
+// Filter valid option rows — must have a real ticker in col B and a number in col G (avg entry)
+function isValidOptRow(r){
+  try{
+    if(!r||!r[1]||!r[6])return false;
+    const t=String(r[1]).trim();
+    if(!/^[A-Za-z]{1,5}$/.test(t))return false; // ticker must be letters only
+    if(isNaN(parseFloat(r[6])))return false; // must have numeric entry
+    return true;
+  }catch(e){return false;}
+}
+
+// Build paired futures trades from leg rows
+function buildPairs(rows){
   const trades={};
-  futRows.forEach((r,idx)=>{
-    const num=r[2];if(!num&&num!==0)return;
-    if(!trades[num])trades[num]={opens:[],closes:[],date:r[0]};
-    const type=(r[3]||'').toLowerCase();
-    if(type==='open'||type==='scale in')trades[num].opens.push(r);
-    else if(type==='close'||type==='trim')trades[num].closes.push(r);
-    if(r[0])trades[num].date=r[0];
+  rows.forEach(r=>{
+    try{
+      const num=r[2];
+      if(num===null||num===undefined||num==='')return;
+      const k=String(num);
+      if(!trades[k])trades[k]={opens:[],closes:[]};
+      const type=String(r[3]||'').toLowerCase().trim();
+      if(type==='open'||type==='scale in')trades[k].opens.push(r);
+      else if(type==='close'||type==='trim')trades[k].closes.push(r);
+    }catch(e){}
   });
   return trades;
 }
 
-function futureTradeCard(tradeNum,t){
-  // Only show if there's at least one close
-  if(!t.closes.length)return null;
-  const closeRow=t.closes[t.closes.length-1];
-  const openRow=t.opens[0];
-  if(!openRow)return null;
-
-  const side=(closeRow[4]||openRow[4]||'').toLowerCase();
-  const entryPrice=openRow[5];
-  const exitPrice=closeRow[5];
-  const qty=closeRow[6]||openRow[6]||'';
-  const pl=closeRow[8];
-  const pts=closeRow[9];
-  const setup=closeRow[11]||openRow[11]||'';
-  const notes=closeRow[12]||openRow[12]||'';
-  const exec=closeRow[13]||openRow[13]||'';
-  const date=fmtD(closeRow[0]||openRow[0]);
-  const ticker=closeRow[1]||openRow[1]||'—';
-  const plFmt=fmt(pl);
-  const pc=plCls(pl);
-  const sideClass=side==='long'?'long':'short';
-
-  return`<div class="trade-card">
-    <div class="tc-main">
-      <div class="tc-left">
-        <span class="tc-ticker">${ticker}</span>
-        <span class="tc-side ${sideClass}">${side} · ${qty} contracts</span>
+function futCard(tradeNum,t){
+  try{
+    if(!t.closes.length||!t.opens.length)return'';
+    const c=t.closes[t.closes.length-1];
+    const o=t.opens[0];
+    const side=String(c[4]||o[4]||'').toLowerCase();
+    const sideClass=side==='long'?'long':'short';
+    const entryP=o[5]||'—';
+    const exitP=c[5]||'—';
+    const qty=c[6]||o[6]||'';
+    const pl=c[8];const pts=c[9];
+    const setup=c[11]||o[11]||'';
+    const notes=c[12]||o[12]||'';
+    const exec=c[13]||o[13]||'';
+    const date=fmtD(c[0]||o[0]);
+    const ticker=c[1]||o[1]||'—';
+    const plFmt=fmt(pl);
+    const pc=pl!==''&&!isNaN(parseFloat(pl))?(parseFloat(pl)>=0?'pos':'neg'):'';
+    return`<div class="tc">
+      <div class="tc-top">
+        <div><div class="tc-ticker">${ticker}</div><div class="tc-side ${sideClass}">${side} · ${qty} contracts</div></div>
+        <div style="text-align:right"><div class="tc-pl ${pc}">${plFmt||'—'}</div>${pts?`<div class="tc-pts">${pts} pts</div>`:''}</div>
       </div>
-      <div class="tc-right">
-        <span class="tc-pl ${pc}">${plFmt||'—'}</span>
-        ${pts?`<span class="tc-pct">${pts} pts</span>`:''}
+      <div class="tc-prices">
+        <div class="tc-p"><div class="tc-p-label">Entry</div><div class="tc-p-val">${entryP}</div></div>
+        <div class="tc-div"></div>
+        <div class="tc-p"><div class="tc-p-label">Exit</div><div class="tc-p-val">${exitP}</div></div>
+        <div class="tc-div"></div>
+        <div class="tc-p" style="flex:0;align-items:flex-end"><div class="tc-p-label">Date</div><div class="tc-p-val" style="font-size:12px">${date}</div></div>
       </div>
-    </div>
-    <div class="tc-prices">
-      <div class="tc-price-item">
-        <span class="tc-price-label">Entry</span>
-        <span class="tc-price-val">${entryPrice||'—'}</span>
+      <div class="tc-footer">
+        <div>${setup?`<span class="tc-setup">${setup}</span>`:''}</div>
+        ${pips(exec)}
       </div>
-      <div class="tc-price-div"></div>
-      <div class="tc-price-item">
-        <span class="tc-price-label">Exit</span>
-        <span class="tc-price-val">${exitPrice||'—'}</span>
-      </div>
-      <div class="tc-price-div"></div>
-      <div class="tc-price-item" style="flex:0;align-items:flex-end">
-        <span class="tc-price-label">Date</span>
-        <span class="tc-price-val" style="font-size:12px">${date}</span>
-      </div>
-    </div>
-    <div class="tc-footer">
-      <div class="tc-tags">
-        ${setup?`<span class="tag setup">${setup}</span>`:''}
-      </div>
-      ${pips(exec)}
-    </div>
-    ${notes?`<div class="tc-note">${notes}</div>`:''}
-  </div>`;
+      ${notes?`<div class="tc-note">${notes}</div>`:''}
+    </div>`;
+  }catch(e){return'';}
 }
 
-function openPositionCard(tradeNum,t){
-  const openRow=t.opens[t.opens.length-1];
-  const side=(openRow[4]||'').toLowerCase();
-  const ticker=openRow[1]||'—';
-  const price=openRow[5]||'—';
-  const qty=openRow[6]||'';
-  const date=fmtD(openRow[0]);
-  return`<div class="open-card">
-    <div class="open-label">Open Position</div>
-    <div class="open-main">
-      <div>
-        <div class="open-ticker">${ticker} <span style="font-size:13px;color:var(--t2);font-weight:400">· ${side}</span></div>
-        <div class="open-detail">Entry @ ${price} · ${qty} contracts · ${date}</div>
+function optCard(r){
+  try{
+    if(!isValidOptRow(r))return'';
+    const side=String(r[4]||'').toLowerCase();
+    const sideClass=side==='call'?'call':'put';
+    const strike=r[3]||'';
+    const qty=r[2]||'';
+    const entry=parseFloat(r[6]||0).toFixed(2);
+    const exit=parseFloat(r[7]||0).toFixed(2);
+    const pl=r[8];const pct=r[9];
+    const setup=r[11]||'';const notes=r[12]||'';const exec=r[13]||'';
+    const date=fmtD(r[0]);const ticker=r[1]||'—';
+    const plFmt=fmt(pl);const pctFmt=fmtPct(pct);
+    const pc=pl!==''&&!isNaN(parseFloat(pl))?(parseFloat(pl)>=0?'pos':'neg'):'';
+    return`<div class="tc">
+      <div class="tc-top">
+        <div><div class="tc-ticker">${ticker} ${strike}${side?side[0].toUpperCase():''}</div><div class="tc-side ${sideClass}">${side} · ${qty} contracts</div></div>
+        <div style="text-align:right"><div class="tc-pl ${pc}">${plFmt||'—'}</div>${pctFmt?`<div class="tc-pts">${pctFmt}</div>`:''}</div>
       </div>
-    </div>
-  </div>`;
+      <div class="tc-prices">
+        <div class="tc-p"><div class="tc-p-label">Entry</div><div class="tc-p-val">$${entry}</div></div>
+        <div class="tc-div"></div>
+        <div class="tc-p"><div class="tc-p-label">Exit</div><div class="tc-p-val">$${exit}</div></div>
+        <div class="tc-div"></div>
+        <div class="tc-p" style="flex:0;align-items:flex-end"><div class="tc-p-label">Date</div><div class="tc-p-val" style="font-size:12px">${date}</div></div>
+      </div>
+      <div class="tc-footer">
+        <div>${setup?`<span class="tc-setup">${setup}</span>`:''}</div>
+        ${pips(exec)}
+      </div>
+      ${notes?`<div class="tc-note">${notes}</div>`:''}
+    </div>`;
+  }catch(e){return'';}
 }
 
-function optionTradeCard(r){
-  // Guard: must have a real ticker and entry price
-  if(!r[1]||!r[6]||isNaN(parseFloat(r[6])))return'';
-  const ticker=String(r[1]).toUpperCase().trim();
-  if(!isNaN(ticker)||!/^[A-Z]{1,5}$/.test(ticker))return'';
-  const side=(r[4]||'').toLowerCase();
-  const strike=r[3]||'';
-  const qty=r[2]||'';
-  const entry=parseFloat(r[6]||0).toFixed(2);
-  const exit=parseFloat(r[7]||0).toFixed(2);
-  const pl=r[8];const pct=r[9];
-  const setup=r[11]||'';const notes=r[12]||'';const exec=r[13]||'';
-  const date=fmtD(r[0]);const ticker=r[1]||'—';
-  const plFmt=fmt(pl);const pctFmt=fmtPct(pct);
-  const pc=plCls(pl);
-  const sideClass=side==='call'?'long':'short';
-
-  return`<div class="trade-card">
-    <div class="tc-main">
-      <div class="tc-left">
-        <span class="tc-ticker">${ticker} ${strike}${side?side[0].toUpperCase():''}</span>
-        <span class="tc-side ${sideClass}">${side} · ${qty} contracts</span>
-      </div>
-      <div class="tc-right">
-        <span class="tc-pl ${pc}">${plFmt||'—'}</span>
-        ${pctFmt?`<span class="tc-pct">${pctFmt}</span>`:''}
-      </div>
-    </div>
-    <div class="tc-prices">
-      <div class="tc-price-item">
-        <span class="tc-price-label">Entry</span>
-        <span class="tc-price-val">$${entry}</span>
-      </div>
-      <div class="tc-price-div"></div>
-      <div class="tc-price-item">
-        <span class="tc-price-label">Exit</span>
-        <span class="tc-price-val">$${exit}</span>
-      </div>
-      <div class="tc-price-div"></div>
-      <div class="tc-price-item" style="flex:0;align-items:flex-end">
-        <span class="tc-price-label">Date</span>
-        <span class="tc-price-val" style="font-size:12px">${date}</span>
-      </div>
-    </div>
-    <div class="tc-footer">
-      <div class="tc-tags">${setup?`<span class="tag setup">${setup}</span>`:''}</div>
-      ${pips(exec)}
-    </div>
-    ${notes?`<div class="tc-note">${notes}</div>`:''}
-  </div>`;
+function openCard(num,t){
+  try{
+    const o=t.opens[t.opens.length-1];
+    const side=String(o[4]||'').toLowerCase();
+    const ticker=o[1]||'—';
+    return`<div class="open-card">
+      <div class="open-label">Open Position</div>
+      <div class="open-ticker">${ticker} <span style="font-size:13px;color:#555;font-weight:400">· ${side}</span></div>
+      <div class="open-detail">Entry @ ${o[5]||'—'} · ${o[6]||''} contracts · ${fmtD(o[0])}</div>
+    </div>`;
+  }catch(e){return'';}
 }
 
 async function loadData(){
-  setSyncState('syncing');
+  setSyncState('busy');
   try{
-    const r=await fetch(SCRIPT_URL);
-    rawData=await r.json();
+    const res=await fetch(URL);
+    const json=await res.json();
+    data=json;
     setSyncState('ok');
-    renderDash();renderFutures();renderOptions();
-  }catch(e){setSyncState('fail');}
-}
-
-function setSyncState(s){
-  const dot=document.getElementById('sync-dot');
-  const time=document.getElementById('sync-time');
-  const date=document.getElementById('sync-date');
-  dot.className='sync-dot'+(s==='fail'?' fail':s==='syncing'?' syncing':'');
-  if(s==='ok'){
-    const now=new Date();
-    time.textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    date.textContent=now.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
-  } else {
-    time.textContent=s==='syncing'?'syncing...':'sync failed';
-    date.textContent='';
+    renderDash();
+    renderFutures();
+    renderOptions();
+  }catch(e){
+    setSyncState('fail');
+    document.getElementById('dash-content').innerHTML='<div class="loading">Sync failed — tap ↻ to retry</div>';
   }
 }
 
-function renderDash(){
-  if(!rawData)return;
-  const allFutRows=rawData.futures.slice(1);
-  const trades=buildTradePairs(allFutRows);
-
-  // Closed trades only for stats
-  const closedPLs=Object.values(trades).filter(t=>t.closes.length>0).map(t=>{
-    const pl=t.closes.reduce((s,r)=>s+(parseFloat(r[8])||0),0);return pl;
-  });
-  const futTotal=closedPLs.reduce((a,b)=>a+b,0);
-  const futWins=closedPLs.filter(v=>v>0).length;
-  const futWR=closedPLs.length?Math.round(futWins/closedPLs.length*100):0;
-
-  const validTickers=['SPY','SPX','QQQ','IWM','AAPL','TSLA','NVDA','AMZN','META','GOOGL','MSFT'];
-  const optRows=rawData.options.slice(1).filter(r=>{
-    if(!r[0]||!r[1])return false;
-    const ticker=String(r[1]).toUpperCase().trim();
-    // Exclude stat rows — ticker must be letters only, not a number
-    if(isNaN(ticker)===false)return false;
-    const hasValidTicker=/^[A-Z]{1,5}$/.test(ticker);
-    const hasEntry=r[6]!==''&&r[6]!==null&&!isNaN(parseFloat(r[6]));
-    // Column A must be a date (either a Date object or a date string)
-    const hasDate=r[0] instanceof Date||(typeof r[0]==='string'&&r[0].includes('-'))||typeof r[0]==='object';
-    return hasValidTicker&&hasEntry&&hasDate;
-  });
-  const optPLs=optRows.map(r=>parseFloat(r[8])||0);
-  const optTotal=optPLs.reduce((a,b)=>a+b,0);
-  const optWins=optPLs.filter(v=>v>0).length;
-  const optWR=optPLs.length?Math.round(optWins/optPLs.length*100):0;
-  const combined=futTotal+optTotal;
-
-  // Setup breakdown
-  const setups={};
-  Object.values(trades).filter(t=>t.closes.length>0).forEach(t=>{
-    const r=t.closes[0];const s=r[11]||'Untagged';
-    const pl=t.closes.reduce((acc,c)=>acc+(parseFloat(c[8])||0),0);
-    if(!setups[s])setups[s]={wins:0,total:0,pl:0};
-    setups[s].total++;setups[s].pl+=pl;
-    if(pl>0)setups[s].wins++;
-  });
-  const maxPL=Math.max(...Object.values(setups).map(s=>Math.abs(s.pl)),1);
-
-  // Closed trade cards sorted newest first
-  const closedTrades=Object.entries(trades).filter(([,t])=>t.closes.length>0).reverse();
-  const openTrades=Object.entries(trades).filter(([,t])=>t.closes.length===0&&t.opens.length>0);
-  const showFut=showAllFut?closedTrades:closedTrades.slice(0,5);
-  const showOpt=showAllOpt?optRows:[...optRows].reverse().slice(0,5);
-  const totalClosed=closedTrades.length;
-
-  document.getElementById('dash-content').innerHTML=`
-    <div class="hero">
-      <div class="hero-label">Combined P/L</div>
-      <div class="hero-amount ${combined>=0?'pos':'neg'}">${fmt(combined)||'+$0.00'}</div>
-      <div class="hero-sub">${closedPLs.length} futures · ${optPLs.length} options this period</div>
-    </div>
-
-    <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-label">Futures</div>
-        <div class="stat-val ${futTotal>=0?'pos':'neg'}">${fmt(futTotal)||'—'}</div>
-        <div class="stat-meta">
-          <span class="stat-meta-item">WR <span>${futWR}%</span></span>
-          <span class="stat-meta-item"><span>${futWins}</span>W / <span>${closedPLs.length-futWins}</span>L</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Options</div>
-        <div class="stat-val ${optTotal>=0?'pos':'neg'}">${fmt(optTotal)||'—'}</div>
-        <div class="stat-meta">
-          <span class="stat-meta-item">WR <span>${optWR}%</span></span>
-          <span class="stat-meta-item"><span>${optWins}</span>W / <span>${optPLs.length-optWins}</span>L</span>
-        </div>
-      </div>
-    </div>
-
-    ${openTrades.length>0?`
-    <div class="sec-header"><span class="sec-title">Open Positions (${openTrades.length})</span></div>
-    ${openTrades.map(([num,t])=>openPositionCard(num,t)).join('')}`:''}
-
-    <div class="sec-header">
-      <span class="sec-title">Futures Trades</span>
-      ${totalClosed>5?`<button class="sec-btn" onclick="toggleFut()">${showAllFut?'Show less':'See all '+totalClosed}</button>`:''}
-    </div>
-    ${showFut.length?showFut.map(([num,t])=>futureTradeCard(num,t)).filter(Boolean).join(''):`<div class="empty">No closed trades yet</div>`}
-
-    <div class="sec-header">
-      <span class="sec-title">Options Trades</span>
-      ${optRows.length>5?`<button class="sec-btn" onclick="toggleOpt()">${showAllOpt?'Show less':'See all '+optRows.length}</button>`:''}
-    </div>
-    ${showOpt.length?showOpt.map(r=>optionTradeCard(r)).join(''):`<div class="empty">No options trades yet</div>`}
-
-    ${Object.keys(setups).length>0?`
-    <div class="sec-header"><span class="sec-title">Setup Breakdown</span></div>
-    <div class="breakdown-card">
-      ${Object.entries(setups).map(([name,s])=>{
-        const wr=Math.round(s.wins/s.total*100);
-        const col=s.pl>=0?'var(--green)':'var(--red)';
-        const barW=Math.round(Math.abs(s.pl)/maxPL*100);
-        return`<div class="setup-row">
-          <div class="setup-dot" style="background:${setupColors[name]||'#444'}"></div>
-          <span class="setup-name">${name}</span>
-          <div class="bar-track"><div class="bar-fill" style="width:${barW}%;background:${col}"></div></div>
-          <span class="setup-wr">${wr}%</span>
-          <span class="setup-pl ${s.pl>=0?'pos':'neg'}">${fmt(s.pl)||'—'}</span>
-        </div>`;
-      }).join('')}
-    </div>`:''}
-  `;
+function setSyncState(s){
+  try{
+    const dot=document.getElementById('sync-dot');
+    const time=document.getElementById('sync-time');
+    const dateEl=document.getElementById('sync-date');
+    dot.className='sync-dot'+(s==='fail'?' fail':s==='busy'?' busy':'');
+    if(s==='ok'){
+      const now=new Date();
+      time.textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      dateEl.textContent=now.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'});
+    } else {
+      time.textContent=s==='busy'?'syncing...':'sync failed';
+      dateEl.textContent='';
+    }
+  }catch(e){}
 }
 
-function toggleFut(){showAllFut=!showAllFut;renderDash();}
-function toggleOpt(){showAllOpt=!showAllOpt;renderDash();}
+function renderDash(){
+  try{
+    if(!data)return;
+    const futRows=data.futures?data.futures.slice(1):[];
+    const trades=buildPairs(futRows);
+    const closedPLs=Object.values(trades).filter(t=>t.closes.length>0).map(t=>t.closes.reduce((s,r)=>s+(parseFloat(r[8])||0),0));
+    const futTotal=closedPLs.reduce((a,b)=>a+b,0);
+    const futWins=closedPLs.filter(v=>v>0).length;
+    const futWR=closedPLs.length?Math.round(futWins/closedPLs.length*100):0;
+
+    const optRows=(data.options?data.options.slice(1):[]).filter(isValidOptRow);
+    const optPLs=optRows.map(r=>parseFloat(r[8])||0);
+    const optTotal=optPLs.reduce((a,b)=>a+b,0);
+    const optWins=optPLs.filter(v=>v>0).length;
+    const optWR=optPLs.length?Math.round(optWins/optPLs.length*100):0;
+    const combined=futTotal+optTotal;
+
+    // Setup breakdown
+    const setupColors={'FVG Reclaim':'#9d7fea','Liquidity Sweep':'#3ecfcf','Fractal Confirm':'#d466e8','Equal Levels':'#f5a623','Dealer Hedge Level':'#c8c8c8','0DTE Momentum':'#3ddc84','Other':'#444','Untagged':'#333'};
+    const setups={};
+    Object.values(trades).filter(t=>t.closes.length>0).forEach(t=>{
+      const pl=t.closes.reduce((acc,c)=>acc+(parseFloat(c[8])||0),0);
+      const s=t.closes[0][11]||'Untagged';
+      if(!setups[s])setups[s]={wins:0,total:0,pl:0};
+      setups[s].total++;setups[s].pl+=pl;
+      if(pl>0)setups[s].wins++;
+    });
+    const maxPL=Math.max(...Object.values(setups).map(s=>Math.abs(s.pl)),1);
+
+    const closedTrades=Object.entries(trades).filter(([,t])=>t.closes.length>0).reverse();
+    const openTrades=Object.entries(trades).filter(([,t])=>t.closes.length===0&&t.opens.length>0);
+    const showFutTrades=allFut?closedTrades:closedTrades.slice(0,5);
+    const showOptRows=allOpt?[...optRows].reverse():[...optRows].reverse().slice(0,5);
+
+    document.getElementById('dash-content').innerHTML=`
+      <div class="hero">
+        <div class="hero-label">Combined P/L</div>
+        <div class="hero-amount ${combined>=0?'pos':'neg'}">${fmt(combined)||'+$0.00'}</div>
+        <div class="hero-sub">${closedPLs.length} futures · ${optPLs.length} options</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-label">Futures</div>
+          <div class="stat-val ${futTotal>=0?'pos':'neg'}">${fmt(futTotal)||'$0'}</div>
+          <div class="stat-meta"><span>WR <b>${futWR}%</b></span><span><b>${futWins}</b>W / <b>${closedPLs.length-futWins}</b>L</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Options</div>
+          <div class="stat-val ${optTotal>=0?'pos':'neg'}">${fmt(optTotal)||'$0'}</div>
+          <div class="stat-meta"><span>WR <b>${optWR}%</b></span><span><b>${optWins}</b>W / <b>${optPLs.length-optWins}</b>L</span></div>
+        </div>
+      </div>
+      ${openTrades.length?`<div class="sec-hdr"><span class="sec-title">Open (${openTrades.length})</span></div>${openTrades.map(([n,t])=>openCard(n,t)).join('')}`:''}
+      <div class="sec-hdr">
+        <span class="sec-title">Futures Trades</span>
+        ${closedTrades.length>5?`<button class="sec-btn" onclick="allFut=!allFut;renderDash()">${allFut?'Show less':'See all '+closedTrades.length}</button>`:''}
+      </div>
+      ${showFutTrades.length?showFutTrades.map(([n,t])=>futCard(n,t)).filter(Boolean).join(''):'<div class="empty">No closed trades yet</div>'}
+      <div class="sec-hdr">
+        <span class="sec-title">Options Trades</span>
+        ${optRows.length>5?`<button class="sec-btn" onclick="allOpt=!allOpt;renderDash()">${allOpt?'Show less':'See all '+optRows.length}</button>`:''}
+      </div>
+      ${showOptRows.length?showOptRows.map(r=>optCard(r)).filter(Boolean).join(''):'<div class="empty">No options trades yet</div>'}
+      ${Object.keys(setups).length?`
+      <div class="sec-hdr"><span class="sec-title">Setup Breakdown</span></div>
+      <div class="breakdown">
+        ${Object.entries(setups).map(([name,s])=>{
+          const wr=Math.round(s.wins/s.total*100);
+          const col=s.pl>=0?'#3ddc84':'#ff5f5f';
+          const w=Math.round(Math.abs(s.pl)/maxPL*100);
+          return`<div class="srow"><div class="sdot" style="background:${setupColors[name]||'#444'}"></div><span class="sname">${name}</span><div class="sbar"><div class="sbar-fill" style="width:${w}%;background:${col}"></div></div><span class="swr">${wr}%</span><span class="spl ${s.pl>=0?'pos':'neg'}">${fmt(s.pl)||'—'}</span></div>`;
+        }).join('')}
+      </div>`:''}
+    `;
+  }catch(e){
+    document.getElementById('dash-content').innerHTML='<div class="loading">Error rendering — tap ↻ to retry</div>';
+    console.error('renderDash error:',e);
+  }
+}
 
 function renderFutures(){
-  if(!rawData)return;
-  const allRows=rawData.futures.slice(1);
-  const trades=buildTradePairs(allRows);
-  const closed=Object.entries(trades).filter(([,t])=>t.closes.length>0).reverse();
-  const open=Object.entries(trades).filter(([,t])=>t.closes.length===0&&t.opens.length>0);
-  document.getElementById('futures-content').innerHTML=`
-    ${open.length?`<div class="sec-header"><span class="sec-title">Open (${open.length})</span></div>${open.map(([n,t])=>openPositionCard(n,t)).join('')}`:''}
-    <div class="sec-header"><span class="sec-title">Closed Trades (${closed.length})</span></div>
-    ${closed.length?closed.map(([n,t])=>futureTradeCard(n,t)).filter(Boolean).join(''):`<div class="empty">No closed trades yet</div>`}
-  `;
+  try{
+    if(!data)return;
+    const rows=data.futures?data.futures.slice(1):[];
+    const trades=buildPairs(rows);
+    const closed=Object.entries(trades).filter(([,t])=>t.closes.length>0).reverse();
+    const open=Object.entries(trades).filter(([,t])=>t.closes.length===0&&t.opens.length>0);
+    document.getElementById('fut-content').innerHTML=`
+      ${open.length?`<div class="sec-hdr"><span class="sec-title">Open (${open.length})</span></div>${open.map(([n,t])=>openCard(n,t)).join('')}`:''}
+      <div class="sec-hdr"><span class="sec-title">Closed (${closed.length})</span></div>
+      ${closed.length?closed.map(([n,t])=>futCard(n,t)).filter(Boolean).join(''):'<div class="empty">No closed trades yet</div>'}
+    `;
+  }catch(e){console.error('renderFutures:',e);}
 }
 
 function renderOptions(){
-  if(!rawData)return;
-  const rows=[...rawData.options.slice(1).filter(r=>{
-    if(!r[0]||!r[1])return false;
-    const ticker=String(r[1]).toUpperCase().trim();
-    if(!isNaN(ticker))return false;
-    return /^[A-Z]{1,5}$/.test(ticker)&&r[6]!==''&&r[6]!==null&&!isNaN(parseFloat(r[6]));
-  })].reverse();
-  document.getElementById('options-content').innerHTML=`
-    <div class="sec-header"><span class="sec-title">All Options (${rows.length})</span></div>
-    ${rows.length?rows.map(r=>optionTradeCard(r)).join(''):`<div class="empty">No options trades yet</div>`}
-  `;
+  try{
+    if(!data)return;
+    const rows=[...(data.options?data.options.slice(1):[]).filter(isValidOptRow)].reverse();
+    document.getElementById('opt-content').innerHTML=`
+      <div class="sec-hdr"><span class="sec-title">All Options (${rows.length})</span></div>
+      ${rows.length?rows.map(r=>optCard(r)).filter(Boolean).join(''):'<div class="empty">No options trades yet</div>'}
+    `;
+  }catch(e){console.error('renderOptions:',e);}
 }
 
 async function submitTrade(){
-  const btn=document.getElementById('submit-btn');
+  const btn=document.getElementById('sub-btn');
   const msg=document.getElementById('form-msg');
   btn.disabled=true;msg.textContent='Submitting...';msg.className='form-msg';
-  const p=mode==='futures'?{type:'futures',date:document.getElementById('f-date').value,ticker:document.getElementById('f-ticker').value,tradeNum:document.getElementById('f-tradenum').value,legType:document.getElementById('f-type').value,side:document.getElementById('f-side').value,price:document.getElementById('f-price').value,qty:document.getElementById('f-qty').value,matchRow:document.getElementById('f-matchrow').value,setup:document.getElementById('f-setup').value,notes:document.getElementById('f-notes').value,exec:document.getElementById('f-exec').value}:{type:'options',date:document.getElementById('o-date').value,ticker:document.getElementById('o-ticker').value,qty:document.getElementById('o-qty').value,strike:document.getElementById('o-strike').value,side:document.getElementById('o-side').value,exp:document.getElementById('o-exp').value,avgEntry:document.getElementById('o-entry').value,avgExit:document.getElementById('o-exit').value,setup:document.getElementById('o-setup').value,notes:document.getElementById('o-notes').value,exec:document.getElementById('o-exec').value};
+  const p=mode==='futures'?{
+    type:'futures',
+    date:document.getElementById('f-date').value,
+    ticker:document.getElementById('f-ticker').value,
+    tradeNum:document.getElementById('f-num').value,
+    legType:document.getElementById('f-type').value,
+    side:document.getElementById('f-side').value,
+    price:document.getElementById('f-price').value,
+    qty:document.getElementById('f-qty').value,
+    matchRow:document.getElementById('f-match').value,
+    setup:document.getElementById('f-setup').value,
+    notes:document.getElementById('f-notes').value,
+    exec:document.getElementById('f-exec').value
+  }:{
+    type:'options',
+    date:document.getElementById('o-date').value,
+    ticker:document.getElementById('o-ticker').value,
+    qty:document.getElementById('o-qty').value,
+    strike:document.getElementById('o-strike').value,
+    side:document.getElementById('o-side').value,
+    exp:document.getElementById('o-exp').value,
+    avgEntry:document.getElementById('o-entry').value,
+    avgExit:document.getElementById('o-exit').value,
+    setup:document.getElementById('o-setup').value,
+    notes:document.getElementById('o-notes').value,
+    exec:document.getElementById('o-exec').value
+  };
   try{
-    await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(p),headers:{'Content-Type':'application/json'},mode:'no-cors'});
+    await fetch(URL,{method:'POST',body:JSON.stringify(p),headers:{'Content-Type':'application/json'},mode:'no-cors'});
     msg.textContent='✓ Submitted';msg.className='form-msg ok';
     setTimeout(()=>{loadData();msg.textContent='';btn.disabled=false;},1500);
-  }catch(e){msg.textContent='Error — check connection';msg.className='form-msg err';btn.disabled=false;}
+  }catch(e){
+    msg.textContent='Error — check connection';msg.className='form-msg err';btn.disabled=false;
+  }
 }
 
 loadData();
