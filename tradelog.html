@@ -264,7 +264,14 @@ function isValidOptRow(r){
     if(!r||!r[1]||!r[6])return false;
     const t=String(r[1]).trim();
     if(!/^[A-Za-z]{1,5}$/.test(t))return false; // ticker must be letters only
-    if(isNaN(parseFloat(r[6])))return false; // must have numeric entry
+    const entry=parseFloat(r[6]);
+    if(isNaN(entry))return false; // must have numeric entry
+    if(entry>1000)return false; // entry price over 1000 = not a real option entry, likely a balance
+    const qty=parseFloat(r[2]);
+    if(!isNaN(qty)&&qty>500)return false; // QTY over 500 = balance row not a trade
+    // col L and M (index 11,12) must not be large balance numbers if col A has no valid date
+    const strike=parseFloat(r[3]);
+    if(!isNaN(strike)&&strike>10000)return false; // strike can't be a balance number
     return true;
   }catch(e){return false;}
 }
@@ -336,6 +343,10 @@ function optCard(r){
     const exit=parseFloat(r[7]||0).toFixed(2);
     const pl=r[8];const pct=r[9];
     const setup=r[11]||'';const notes=r[12]||'';const exec=r[13]||'';
+    // Guard: if setup or notes look like balance numbers, ignore them
+    const cleanSetup=setup&&isNaN(parseFloat(setup))?setup:'';
+    const cleanNotes=notes&&isNaN(parseFloat(notes))?notes:'';
+    const cleanExec=exec&&!isNaN(parseInt(exec))&&parseInt(exec)<=5?exec:'';
     const date=fmtD(r[0]);const ticker=r[1]||'—';
     const plFmt=fmt(pl);const pctFmt=fmtPct(pct);
     const pc=pl!==''&&!isNaN(parseFloat(pl))?(parseFloat(pl)>=0?'pos':'neg'):'';
@@ -352,10 +363,10 @@ function optCard(r){
         <div class="tc-p" style="flex:0;align-items:flex-end"><div class="tc-p-label">Date</div><div class="tc-p-val" style="font-size:12px">${date}</div></div>
       </div>
       <div class="tc-footer">
-        <div>${setup?`<span class="tc-setup">${setup}</span>`:''}</div>
-        ${pips(exec)}
+        <div>${cleanSetup?`<span class="tc-setup">${cleanSetup}</span>`:''}</div>
+        ${pips(cleanExec)}
       </div>
-      ${notes?`<div class="tc-note">${notes}</div>`:''}
+      ${cleanNotes?`<div class="tc-note">${cleanNotes}</div>`:''}
     </div>`;
   }catch(e){return'';}
 }
