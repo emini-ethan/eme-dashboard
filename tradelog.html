@@ -42,12 +42,12 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--t1);min-heig
 .sync-btn{background:none;border:none;color:var(–t3);font-size:16px;cursor:pointer;padding:2px 4px;line-height:1}
 
 /* BOTTOM NAV */
-.bnav{position:fixed;bottom:0;left:0;right:0;background:var(–c1);border-top:1px solid var(–b2);z-index:50;padding-bottom:var(–safe-bottom)}
-.bnav-inner{display:flex;height:58px;max-width:400px;margin:0 auto}
-.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;color:var(–t3);font-family:‘Syne’,sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.03em}
-.bnav-btn.active{color:var(–accent)}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#0f0f0f;border-top:1px solid #282828;z-index:50;padding-bottom:var(–safe-bottom);-webkit-backdrop-filter:none;backdrop-filter:none}
+.bnav-inner{display:flex;height:58px;width:100%;max-width:360px;margin:0 auto;justify-content:center}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;color:#3a3a3a;font-family:‘Syne’,sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:.03em;max-width:90px}
+.bnav-btn.active{color:#c8ff00 !important}
 .bnav-btn svg{width:19px;height:19px;stroke-width:1.7;fill:none;stroke:currentColor}
-.bnav-log-pill{background:var(–accent);color:#000;border-radius:10px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.04em}
+.bnav-log-pill{background:#c8ff00;color:#000;border-radius:10px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.04em}
 
 /* PAGES */
 .page{display:none;padding:16px 16px 90px;animation:fadeUp .15s ease}
@@ -490,7 +490,14 @@ function renderDash(){
   const futWins=closedPLs.filter(v=>v>0).length;
   const futWR=closedPLs.length?Math.round(futWins/closedPLs.length*100):0;
 
-  const optRows=rawData.options.slice(1).filter(r=>r[0]&&r[8]!=='');
+  const validTickers=['SPY','SPX','QQQ','IWM','AAPL','TSLA','NVDA','AMZN','META','GOOGL','MSFT'];
+  const optRows=rawData.options.slice(1).filter(r=>{
+    if(!r[0]||!r[1])return false;
+    const ticker=String(r[1]).toUpperCase().trim();
+    const hasValidTicker=validTickers.includes(ticker)||/^[A-Z]{1,5}$/.test(ticker);
+    const hasEntry=r[6]!==''&&r[6]!==null&&!isNaN(parseFloat(r[6]));
+    return hasValidTicker&&hasEntry;
+  });
   const optPLs=optRows.map(r=>parseFloat(r[8])||0);
   const optTotal=optPLs.reduce((a,b)=>a+b,0);
   const optWins=optPLs.filter(v=>v>0).length;
@@ -594,7 +601,7 @@ function renderFutures(){
 
 function renderOptions(){
   if(!rawData)return;
-  const rows=[...rawData.options.slice(1).filter(r=>r[0])].reverse();
+  const rows=[...rawData.options.slice(1).filter(r=>r[0]&&r[1]&&/^[A-Z]{1,5}$/.test(String(r[1]).trim())&&r[6]!==''&&!isNaN(parseFloat(r[6])))].reverse();
   document.getElementById('options-content').innerHTML=`
     <div class="sec-header"><span class="sec-title">All Options (${rows.length})</span></div>
     ${rows.length?rows.map(r=>optionTradeCard(r)).join(''):`<div class="empty">No options trades yet</div>`}
