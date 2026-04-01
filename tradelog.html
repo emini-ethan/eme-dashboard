@@ -28,7 +28,7 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--t1);min-heig
 .pos{color:var(--green)}.neg{color:var(--red)}
 
 /* HEADER */
-.header{padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(–bg);z-index:40;border-bottom:1px solid var(–b1)}
+.header{padding:14px 18px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#080808 !important;z-index:40;border-bottom:1px solid #1c1c1c}
 .header-logo{font-size:14px;font-weight:700;letter-spacing:.06em;color:var(–t1)}
 .header-logo em{color:var(–accent);font-style:normal}
 .header-meta{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
@@ -405,6 +405,10 @@ function openPositionCard(tradeNum,t){
 }
 
 function optionTradeCard(r){
+  // Guard: must have a real ticker and entry price
+  if(!r[1]||!r[6]||isNaN(parseFloat(r[6])))return'';
+  const ticker=String(r[1]).toUpperCase().trim();
+  if(!isNaN(ticker)||!/^[A-Z]{1,5}$/.test(ticker))return'';
   const side=(r[4]||'').toLowerCase();
   const strike=r[3]||'';
   const qty=r[2]||'';
@@ -494,9 +498,13 @@ function renderDash(){
   const optRows=rawData.options.slice(1).filter(r=>{
     if(!r[0]||!r[1])return false;
     const ticker=String(r[1]).toUpperCase().trim();
-    const hasValidTicker=validTickers.includes(ticker)||/^[A-Z]{1,5}$/.test(ticker);
+    // Exclude stat rows — ticker must be letters only, not a number
+    if(isNaN(ticker)===false)return false;
+    const hasValidTicker=/^[A-Z]{1,5}$/.test(ticker);
     const hasEntry=r[6]!==''&&r[6]!==null&&!isNaN(parseFloat(r[6]));
-    return hasValidTicker&&hasEntry;
+    // Column A must be a date (either a Date object or a date string)
+    const hasDate=r[0] instanceof Date||(typeof r[0]==='string'&&r[0].includes('-'))||typeof r[0]==='object';
+    return hasValidTicker&&hasEntry&&hasDate;
   });
   const optPLs=optRows.map(r=>parseFloat(r[8])||0);
   const optTotal=optPLs.reduce((a,b)=>a+b,0);
@@ -601,7 +609,12 @@ function renderFutures(){
 
 function renderOptions(){
   if(!rawData)return;
-  const rows=[...rawData.options.slice(1).filter(r=>r[0]&&r[1]&&/^[A-Z]{1,5}$/.test(String(r[1]).trim())&&r[6]!==''&&!isNaN(parseFloat(r[6])))].reverse();
+  const rows=[...rawData.options.slice(1).filter(r=>{
+    if(!r[0]||!r[1])return false;
+    const ticker=String(r[1]).toUpperCase().trim();
+    if(!isNaN(ticker))return false;
+    return /^[A-Z]{1,5}$/.test(ticker)&&r[6]!==''&&r[6]!==null&&!isNaN(parseFloat(r[6]));
+  })].reverse();
   document.getElementById('options-content').innerHTML=`
     <div class="sec-header"><span class="sec-title">All Options (${rows.length})</span></div>
     ${rows.length?rows.map(r=>optionTradeCard(r)).join(''):`<div class="empty">No options trades yet</div>`}
