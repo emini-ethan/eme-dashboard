@@ -492,40 +492,40 @@ function renderCalendar(){
     const el=document.getElementById('cal-content');
     if(!el)return;
 
-    // Build day->PL map from futures closes
-    const dayMap={};
-    const futRows=data.futures?data.futures.slice(1):[];
-    futRows.forEach(r=>{
-      try{
-        if(!r[0]||r[3]==='open'||r[3]==='scale in')return;
-        const pl=parseFloat(r[8]);
-        if(isNaN(pl))return;
-        const dt=new Date(r[0]);
-        if(isNaN(dt.getTime()))return;
-        const key=dt.getUTCFullYear()+'-'+(dt.getUTCMonth()+1)+'-'+dt.getUTCDate();
-        if(!dayMap[key])dayMap[key]={pl:0,trades:0};
-        dayMap[key].pl+=pl;
-        dayMap[key].trades++;
-      }catch(e){}
-    });
-    // Add options
-    const optRows=(data.options?data.options.slice(1):[]).filter(isValidOptRow);
-    optRows.forEach(r=>{
-      try{
-        const pl=parseFloat(r[8]);
-        if(isNaN(pl))return;
-        const dt=new Date(r[0]);
-        if(isNaN(dt.getTime()))return;
-        const key=dt.getUTCFullYear()+'-'+(dt.getUTCMonth()+1)+'-'+dt.getUTCDate();
-        if(!dayMap[key])dayMap[key]={pl:0,trades:0};
-        dayMap[key].pl+=pl;
-        dayMap[key].trades++;
-      }catch(e){}
-    });
-
     const now=new Date();
     let viewYear=now.getFullYear();
     let viewMonth=now.getMonth();
+    let calType=window._calType||'all';
+
+    function buildDayMap(type){
+      const map={};
+      if(type==='all'||type==='futures'){
+        const futRows=data.futures?data.futures.slice(1):[];
+        futRows.forEach(r=>{
+          try{
+            if(!r[0]||r[3]==='open'||r[3]==='scale in')return;
+            const pl=parseFloat(r[8]);if(isNaN(pl))return;
+            const dt=new Date(r[0]);if(isNaN(dt.getTime()))return;
+            const k=dt.getUTCFullYear()+'-'+(dt.getUTCMonth()+1)+'-'+dt.getUTCDate();
+            if(!map[k])map[k]={pl:0,trades:0};
+            map[k].pl+=pl;map[k].trades++;
+          }catch(e){}
+        });
+      }
+      if(type==='all'||type==='options'){
+        const optRows=(data.options?data.options.slice(1):[]).filter(isValidOptRow);
+        optRows.forEach(r=>{
+          try{
+            const pl=parseFloat(r[8]);if(isNaN(pl))return;
+            const dt=new Date(r[0]);if(isNaN(dt.getTime()))return;
+            const k=dt.getUTCFullYear()+'-'+(dt.getUTCMonth()+1)+'-'+dt.getUTCDate();
+            if(!map[k])map[k]={pl:0,trades:0};
+            map[k].pl+=pl;map[k].trades++;
+          }catch(e){}
+        });
+      }
+      return map;
+    }
 
     function fmtShort(n){
       if(n===null||n===undefined)return'';
@@ -536,6 +536,7 @@ function renderCalendar(){
     }
 
     function buildCal(){
+      const dayMap=buildDayMap(calType);
       const year=viewYear,month=viewMonth;
       const firstDay=new Date(year,month,1).getDay();
       const daysInMonth=new Date(year,month+1,0).getDate();
@@ -577,7 +578,14 @@ function renderCalendar(){
         <div class="cal-nav">
           <button class="cal-nav-btn" onclick="calPrev()">‹</button>
           <span class="cal-month">${monthName}</span>
-          <button class="cal-nav-btn" onclick="calNext()">›</button>
+          <div style="display:flex;align-items:center;gap:8px">
+            <select class="fselect" onchange="window._calType=this.value;buildCal()">
+              <option value="all"${calType==='all'?' selected':''}>All</option>
+              <option value="futures"${calType==='futures'?' selected':''}>Futures</option>
+              <option value="options"${calType==='options'?' selected':''}>Options</option>
+            </select>
+            <button class="cal-nav-btn" onclick="calNext()">›</button>
+          </div>
         </div>
         <div class="cal-summary">
           <div class="cal-sum-card">
@@ -600,8 +608,8 @@ function renderCalendar(){
       `;
     }
 
-    window.calPrev=function(){viewMonth--;if(viewMonth<0){viewMonth=11;viewYear--;}buildCal();};
-    window.calNext=function(){viewMonth++;if(viewMonth>11){viewMonth=0;viewYear++;}buildCal();};
+    window.calPrev=function(){viewMonth--;if(viewMonth<0){viewMonth=11;viewYear--;}calType=window._calType||'all';buildCal();};
+    window.calNext=function(){viewMonth++;if(viewMonth>11){viewMonth=0;viewYear++;}calType=window._calType||'all';buildCal();};
     buildCal();
   }catch(e){console.error('renderCalendar:',e);}
 }
@@ -705,10 +713,12 @@ function renderDash(){
     });
     const maxPL=Math.max(...Object.values(setups).map(s=>Math.abs(s.pl)),1);
 
-    const closedTrades=Object.entries(allTrades).filter(([,t])=>t.closes.length>0).reverse();
+    const closedTrades=Object.entries(allTrades).filter(([,t])=>t.closes.length>0).sort((a,b)=>{
+      try{const da=new Date(a[1].closes[a[1].closes.length-1][0]);const db=new Date(b[1].closes[b[1].closes.length-1][0]);return db-da;}catch(e){return 0;}
+    });
     const openTrades=Object.entries(allTrades).filter(([,t])=>t.closes.length===0&&t.opens.length>0);
     const showFutTrades=closedTrades.slice(0,3);
-    const showOptRows=[...allOptRows].reverse().slice(0,3);
+    const showOptRows=[...allOptRows].sort((a,b)=>{try{return new Date(b[0])-new Date(a[0]);}catch(e){return 0;}}).slice(0,3);
 
     const fsel=(id,cur,fn)=>`<select class="fselect" id="${id}" onchange="${fn}(this.value,this)"><option value='today'${cur==='today'?' selected':''}>Today</option><option value='week'${cur==='week'?' selected':''}>This Week</option><option value='month'${cur==='month'?' selected':''}>This Month</option><option value='year'${cur==='year'?' selected':''}>This Year</option><option value='all'${cur==='all'?' selected':''}>All Time</option></select>`;
 
@@ -778,7 +788,9 @@ function renderFutures(){
     if(!data)return;
     const rows=data.futures?data.futures.slice(1):[];
     const trades=buildPairs(rows);
-    const closed=Object.entries(trades).filter(([,t])=>t.closes.length>0).reverse();
+    const closed=Object.entries(trades).filter(([,t])=>t.closes.length>0).sort((a,b)=>{
+      try{const da=new Date(a[1].closes[a[1].closes.length-1][0]);const db=new Date(b[1].closes[b[1].closes.length-1][0]);return db-da;}catch(e){return 0;}
+    });
     const open=Object.entries(trades).filter(([,t])=>t.closes.length===0&&t.opens.length>0);
     document.getElementById('fut-content').innerHTML=`
       ${open.length?`<div class="sec-hdr"><span class="sec-title">Open (${open.length})</span></div>${open.map(([n,t])=>openCard(n,t)).join('')}`:''}
@@ -791,7 +803,7 @@ function renderFutures(){
 function renderOptions(){
   try{
     if(!data)return;
-    const rows=[...(data.options?data.options.slice(1):[]).filter(isValidOptRow)].reverse();
+    const rows=[...(data.options?data.options.slice(1):[]).filter(isValidOptRow)].sort((a,b)=>{try{return new Date(b[0])-new Date(a[0]);}catch(e){return 0;}});
     document.getElementById('opt-content').innerHTML=`
       <div class="sec-hdr"><span class="sec-title">All Options (${rows.length})</span></div>
       ${rows.length?rows.map(r=>optCard(r)).filter(Boolean).join(''):'<div class="empty">No options trades yet</div>'}
